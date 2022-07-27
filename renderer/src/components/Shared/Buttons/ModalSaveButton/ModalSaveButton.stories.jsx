@@ -6,5 +6,7 @@ export default{
 }
 
 export const ModalSave = {
-    args:{}
+    args:{
+        label:"Add"
+    }
 }

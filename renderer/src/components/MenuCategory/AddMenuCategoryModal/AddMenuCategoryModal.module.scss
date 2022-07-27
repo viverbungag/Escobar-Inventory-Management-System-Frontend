@@ -6,12 +6,18 @@
     gap: 2rem;
     justify-content: center;
     align-items: center;
+    font-family: Helvetica, Arial, sans-serif;
 
     &__text-field{
         width: 90%;
     }
 
     &__title{
-        font-size: 1.5rem;
+        text-align: center;
+        font-size: 1.3rem;
+    }
+
+    &__text-placeholder{
+        font-family: Helvetica, Arial, sans-serif;
     }
 }

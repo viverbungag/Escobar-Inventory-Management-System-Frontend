@@ -3,9 +3,9 @@ import styles from "./InactivateButton.module.scss";
 import { Icon } from '@iconify/react';
 import minusIcon from '@iconify/icons-el/minus';
 
-const InactivateButton = ({label}) => {
+const InactivateButton = ({label, onClick}) => {
   return (
-    <button className={styles["inactivate-button"]}>
+    <button className={styles["inactivate-button"]} onClick={onClick}>
         <div className ={styles["inactivate-button__container"]}>
         <div className={styles["inactivate-button__icon"]}>
             <Icon icon={minusIcon}/>

@@ -19,7 +19,7 @@ const SortSelect = ({sortItems, selectedSort, handleChange}) => {
                 <em>None</em>
             </MenuItem>
             {sortItems.map((sortItem)=>{
-                return <MenuItem value={sortItem.label}>{sortItem.label}</MenuItem>
+                return <MenuItem key={sortItem} value={sortItem.label}>{sortItem.label}</MenuItem>
             })}
         </Select>
   </FormControl>

@@ -11,7 +11,7 @@ const AddMenuCategoryModal = ({name, nameOnChange, onClickAddButton}) => {
         <div className={styles["add-menu-category-modal__text-field"]}>
         <TextField 
         id="filled-basic" 
-        label="Input name here"
+        label={<span className={styles["add-menu-category-modal__text-placeholder"]}>Input name here</span>}
         variant="standard"
         fullWidth 
         value={name}

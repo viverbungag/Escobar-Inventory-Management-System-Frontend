@@ -45,10 +45,10 @@ export default function EnhancedTable({headers, rows,
         </thead>
         <tbody>
           {rows.map((row, index)=>(
-            <tr key={index} onClick={()=>{handleItemCheckboxChange(row)}}>
+            <tr key={index} onClick={()=>{handleItemCheckboxChange(row)}} className={row.isSelected && styles["data-table__row--selected"]}>
               <td><Checkbox checked={row.isSelected}/></td>
               {headers.map((header) =>(
-                <td key={header.value}>{row[header.value]}</td>
+                <td key={header.value}>{String(row[header.value])}</td>
               ))}
             </tr>
           ))}

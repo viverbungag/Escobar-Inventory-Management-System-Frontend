@@ -1,6 +1,12 @@
 .data-table{
     min-width:100%;
 
+    &__row{
+        &--selected{
+            background-color: #f0f8ff;
+        }
+    }
+
     table{
         border-collapse: collapse;
         min-width:100%;
@@ -8,7 +14,7 @@
     tbody{
         tr{
             &:hover{
-                background-color: #f0f8ff;
+                background-color: #efefef;
                 cursor: pointer;
             }
         }
