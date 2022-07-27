@@ -1,0 +1,35 @@
+.menu-category-page{
+    display: flex;
+    flex-direction: column;
+    min-width: 100vw;
+    font-family: Helvetica, Arial, sans-serif;
+
+    &__upper-section{
+        width:100%;
+    }
+
+    &__lower-section{
+        margin-top: 2.5rem;
+        width:100%;
+        display: flex;
+        justify-content: flex-start;
+
+    }
+
+    &__main-section{
+        display: flex;
+        flex-direction: column;
+        padding: 3rem 2rem;
+        gap: 3rem;
+        width:100%;
+    }
+
+    &__main-top-section{
+        display: flex;
+        gap: 2rem;
+    }
+
+    &__main-bottom-section{
+        min-width: 100%;
+    }
+}

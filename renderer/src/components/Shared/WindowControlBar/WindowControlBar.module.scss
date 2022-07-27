@@ -1,0 +1,19 @@
+.window-control-bar{
+    left:0;
+    right:0;
+    top:0;
+    background-color: #D3D3D3;
+    position:fixed;
+    
+    &__container{
+        display: flex;
+        justify-content: flex-end;
+        gap: 1.5rem;
+        padding: 1rem;
+
+        svg{
+            font-size: 1rem;
+        }
+    }
+
+}

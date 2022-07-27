@@ -74,7 +74,9 @@ export default function createWindow(windowName, options) {
       contextIsolation: false,
       ...options.webPreferences,
     },
+    // frame:false
   });
+  win.maximize();
 
   win.on('close', saveState);
 

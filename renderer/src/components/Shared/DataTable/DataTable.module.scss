@@ -1,0 +1,13 @@
+.DataTable{
+    min-width:100%;
+
+    table{
+        border-collapse: collapse;
+        min-width:100%;
+    }
+
+    td, th{
+        border-bottom: 1px solid #ddd;
+        padding: 0.5rem 0;
+    }
+}

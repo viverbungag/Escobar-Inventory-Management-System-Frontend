@@ -1,0 +1,30 @@
+
+.navigation{
+    min-width: 17rem;
+    background-color: #FAFAFA;
+    min-height: 100vh;
+
+    &__title{
+        padding: 2rem 1rem;
+        font-size: 0.8rem;
+        color: #7F7F7F;
+        letter-spacing: 0.1rem;
+    }
+
+    &__list{
+        padding-left: 2rem;
+        padding-bottom: 1rem;
+        letter-spacing: 0.08rem;
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    &__item-container{
+        display: flex;
+        gap: 0.5rem;
+        justify-content: left;
+        align-items: center;
+        color: #494949;
+    }
+}
