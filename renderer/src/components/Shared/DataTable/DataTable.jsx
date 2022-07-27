@@ -1,23 +1,38 @@
 import styles from "./DataTable.module.scss";
 import { Checkbox } from "@mui/material";
 import { TablePagination } from '@mui/material';
+import SortSelect from "../SortSelect/SortSelect";
+import SortOrderRadioGroup from "../SortOrderRadioGroup/SortOrderRadioGroup";
 
 export default function EnhancedTable({headers, rows, 
-  isAscending, sortedBy, pageNo, 
+  sortOrder, sortedBy, pageNo, sortItems, 
   pageSize, totalPages, handleItemCheckboxChange,
   isSelectAllChecked, handleSelectAllClick, 
-  handlePageNoChange, handlePageSizeChange}) {
+  handlePageNoChange, handlePageSizeChange,
+  handleSortedByChange, handleSortOrderChange}) {
 
   return (
-    <div className={styles["DataTable"]}>
-      <TablePagination
-          component="div"
-          count={totalPages}
-          page={pageNo}
-          onPageChange={handlePageNoChange}
-          rowsPerPage={pageSize}
-          onRowsPerPageChange={handlePageSizeChange}
+    <div className={styles["data-table"]}>
+      <div className ={styles["data-table__controls"]}>
+        <div className ={styles["data-table__sort"]}>
+        <SortSelect 
+            sortItems={sortItems} 
+            selectedSort={sortedBy} 
+            handleChange={handleSortedByChange}
         />
+        <SortOrderRadioGroup sortOrder={sortOrder} handleChange={handleSortOrderChange}/>
+        </div>
+
+        <TablePagination
+            component="div"
+            count={totalPages}
+            page={pageNo}
+            onPageChange={handlePageNoChange}
+            rowsPerPage={pageSize}
+            onRowsPerPageChange={handlePageSizeChange}
+          />
+      </div>
+
 
       <table>
         <thead>
@@ -32,8 +47,8 @@ export default function EnhancedTable({headers, rows,
           {rows.map((row, index)=>(
             <tr key={index} onClick={()=>{handleItemCheckboxChange(row)}}>
               <td><Checkbox checked={row.isSelected}/></td>
-              {headers.map((header, index) =>(
-                <td key={index}>{row[header.value]}</td>
+              {headers.map((header) =>(
+                <td key={header.value}>{row[header.value]}</td>
               ))}
             </tr>
           ))}

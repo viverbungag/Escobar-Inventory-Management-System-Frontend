@@ -3,9 +3,9 @@ import styles from "./SaveButton.module.scss";
 import { Icon } from '@iconify/react';
 import plusIcon from '@iconify/icons-el/plus';
 
-const SaveButton = ({label}) => {
+const SaveButton = ({label, onClick}) => {
   return (
-    <button className={styles["save-button"]}>
+    <button className={styles["save-button"]} onClick={onClick}>
       <div className ={styles["save-button__container"]}>
         <div className={styles["save-button__icon"]}>
           <Icon icon={plusIcon}/>
