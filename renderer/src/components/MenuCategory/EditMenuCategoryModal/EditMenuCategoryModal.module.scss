@@ -1,0 +1,37 @@
+.edit-menu-category-modal{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 2rem;
+    font-family: Helvetica, Arial, sans-serif;
+    
+    &__title{
+        text-align: center;
+        font-size: 1.3rem;
+    }
+
+    &__body{
+        padding-top: 2rem;
+        width: 80%;
+        display: flex;
+        flex-direction: column;
+        margin: 0 auto;
+        gap: 2rem;
+    }
+
+    &__text-field{
+        display: flex;
+        flex-direction: column;
+        gap: 2rem;
+        align-items: center;
+    }
+
+    &__save-button{
+        margin-top: 2rem;
+        align-self: center;
+    }
+
+    &__text-placeholder{
+        font-family: Helvetica, Arial, sans-serif;
+    }
+}

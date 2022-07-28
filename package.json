@@ -25,6 +25,7 @@
   },
   "devDependencies": {
     "@babel/core": "^7.18.9",
+    "@iconify/icons-akar-icons": "^1.2.9",
     "@iconify/icons-bx": "^1.2.4",
     "@iconify/icons-carbon": "^1.2.8",
     "@iconify/icons-el": "^1.2.3",

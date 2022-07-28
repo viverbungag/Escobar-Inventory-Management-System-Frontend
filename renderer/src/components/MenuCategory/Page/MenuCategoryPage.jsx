@@ -10,6 +10,7 @@ import { Modal, Slide, Backdrop } from "@mui/material";
 import AddMenuCategoryModal from "../AddMenuCategoryModal/AddMenuCategoryModal";
 import InactiveItemsButton from "../../Shared/Buttons/InactiveItemsButton/InactiveItemsButton";
 import InactiveMenuCategoryModal from "../InactiveMenuCategoryModal/InactiveMenuCategoryModal";
+import EditMenuCategoryModal from "../EditMenuCategoryModal/EditMenuCategoryModal";
 
 const headers = [
   {
@@ -53,18 +54,50 @@ const MenuCategoryPage = () => {
     const [activeTotalPages, setActiveTotalPages] = useState(0);
     const [inactiveTotalPages, setInactiveTotalPages] = useState(0);
 
-    
+    const [selectedActiveItemsCount, setSelectedActiveItemsCount] = useState(0);
+    const [selectedInactiveItemsCount, setSelectedInactiveItemsCount] = useState(0);
+
+    const [nameAdd, setNameAdd] = useState("");
+
+    const [nameEdit, setNameEdit] = useState("");
+    const [isActiveEdit, setIsActiveEdit] = useState(true);
+
+    const [selectedEditItem, setSelectedEditItem] = useState(null);
+
     const [openAddModal, setOpenAddModal] = useState(false);
     const [openViewInactiveModal, setOpenViewInactiveModal] = useState(false);
-    const [nameAdd, setNameAdd] = useState("");
+    const [openEditModal, setOpenEditModal] = useState(false);
 
     const handleOpenAddModal = () => setOpenAddModal(true);
     const handleCloseAddModal = () => setOpenAddModal(false);
     const handleOpenViewInactiveModal = () => setOpenViewInactiveModal(true);
     const handleCloseViewInactiveModal = () => setOpenViewInactiveModal(false);
+    const handleOpenEditModal = (row, tableState) => {
+      if(tableState === "active"){
+        handleActiveItemCheckboxChange(row);
+      }
+
+      if(tableState === "inactive"){
+        handleInactiveItemCheckboxChange(row);
+      }
+      
+      setNameEdit(row.menuCategoryName);
+      setIsActiveEdit(row.isActive);
+      setSelectedEditItem(row);
+      setOpenEditModal(true);
+    };
+    const handleCloseEditModal = () => setOpenEditModal(false);
 
     const handleNameAddChange = (event) => {
       setNameAdd(event.target.value);
+    }
+
+    const handleNameEditChange = (event) => {
+      setNameEdit(event.target.value);
+    }
+
+    const handleIsActiveEditChange = (event) => {
+      setIsActiveEdit(!isActiveEdit);
     }
 
     const handleAddModalButtonClicked = () => {
@@ -110,45 +143,103 @@ const MenuCategoryPage = () => {
     }
 
     const handleActiveItemCheckboxChange = (item) => {
+      let selectedItemsCount = 0;
       const newMenuCategories = activeMenuCategories.map((menuCategory)=>{
         if(menuCategory.menuCategoryId === item.menuCategoryId){
           menuCategory.isSelected = !menuCategory.isSelected;
         }
+
+        if (menuCategory.isSelected){
+          selectedItemsCount++;
+        }
         return menuCategory;
       })
-
+      setSelectedActiveItemsCount(selectedItemsCount);
       setActiveMenuCategories(newMenuCategories);
     }
 
     const handleInactiveItemCheckboxChange = (item) => {
+      let selectedItemsCount = 0;
       const newMenuCategories = inactiveMenuCategories.map((menuCategory)=>{
+
         if(menuCategory.menuCategoryId === item.menuCategoryId){
-          menuCategory.isSelected = !menuCategory.isSelected;
+            menuCategory.isSelected = !menuCategory.isSelected;
+        }
+
+        if (menuCategory.isSelected){
+          selectedItemsCount++;
         }
         return menuCategory;
       })
 
+      setSelectedInactiveItemsCount(selectedItemsCount);
       setInactiveMenuCategories(newMenuCategories);
     }
 
     const handleActiveSelectAllClick = () =>{
+      let selectedItemsCount = 0;
       const newMenuCategories = activeMenuCategories.map((menuCategory)=>{
-        menuCategory.isSelected = !activeIsSelectAllChecked;
+
+        if ((selectedActiveItemsCount > 0 
+          && selectedActiveItemsCount < activeMenuCategories.length)
+          || selectedActiveItemsCount === 0){
+          menuCategory.isSelected = true;
+        }else{
+          menuCategory.isSelected= false
+        }
+
+        if (menuCategory.isSelected){
+          selectedItemsCount++;
+        }
+
         return menuCategory;
       })
 
-      setActiveIsSelectAllChecked(!activeIsSelectAllChecked);
+      setSelectedActiveItemsCount(selectedItemsCount);
+
+      if (activeMenuCategories.length > 0 && selectedActiveItemsCount === activeMenuCategories.length){
+        setActiveIsSelectAllChecked(false);
+      }else{
+        setActiveIsSelectAllChecked(true);
+      }
+
       setActiveMenuCategories(newMenuCategories);
     }
 
     const handleInactiveSelectAllClick = () =>{
+      let selectedItemsCount = 0;
       const newMenuCategories = inactiveMenuCategories.map((menuCategory)=>{
         menuCategory.isSelected = !inactiveIsSelectAllChecked;
+
+        if ((selectedInactiveItemsCount > 0 
+          && selectedInactiveItemsCount < inactiveMenuCategories.length)
+          || selectedInactiveItemsCount === 0){
+          menuCategory.isSelected = true;
+        }else{
+          menuCategory.isSelected= false
+        }
+
+        if (menuCategory.isSelected){
+          selectedItemsCount++;
+        }
+
         return menuCategory;
       })
 
-      setInactiveIsSelectAllChecked(!inactiveIsSelectAllChecked);
+      setSelectedInactiveItemsCount(selectedItemsCount);
+
+      if (inactiveMenuCategories.length > 0 && selectedInactiveItemsCount === inactiveMenuCategories.length){
+        setInactiveIsSelectAllChecked(false);
+      }else{
+        setInactiveIsSelectAllChecked(true);
+      }
+
       setInactiveMenuCategories(newMenuCategories);
+    }
+
+    const handleEditModalButtonClicked = () => {
+      updateMenuCategory();
+      setOpenEditModal(false);
     }
 
     const getAllActiveMenuCategories = () => {
@@ -204,15 +295,36 @@ const MenuCategoryPage = () => {
     )
     .then(function (response) {
       getAllActiveMenuCategories();
+      getAllInactiveMenuCategories();
+    })
+    }
+
+    const updateMenuCategory = () => {
+      console.log("heloww");
+
+      axios.put(`http://localhost:8080/api/v1/menu-category/update/${selectedEditItem.menuCategoryId}`,
+      {
+        "menuCategoryId": selectedEditItem.menuCategoryId,
+        "menuCategoryName": nameEdit,
+        "isActive": isActiveEdit
+      }
+    )
+    .then(function (response) {
+      getAllActiveMenuCategories();
+      getAllInactiveMenuCategories();
     })
     }
 
     const handleActivateClick= () => {
       activateMenuCategory();
+      setInactiveIsSelectAllChecked(false);
+      setSelectedInactiveItemsCount(0);
     }
 
     const handleInactivateClick= () => {
       inactivateMenuCategory();
+      setActiveIsSelectAllChecked(false);
+      setSelectedActiveItemsCount(0);
     }
 
     const activateMenuCategory = () => {
@@ -295,6 +407,7 @@ const MenuCategoryPage = () => {
                 pageSize={inactivePageSize}
                 totalPages={inactiveTotalPages}
                 sortItems={sortItems}
+                tableState="active"
                 handleItemCheckboxChange={handleInactiveItemCheckboxChange}
                 isSelectAllChecked={inactiveIsSelectAllChecked}
                 handleSelectAllClick={handleInactiveSelectAllClick}
@@ -303,6 +416,35 @@ const MenuCategoryPage = () => {
                 handleSortedByChange={handleInactiveSortedByChange}
                 handleSortOrderChange={handleInactiveSortOrderChange}
                 handleActivateClick={handleActivateClick}
+                handleOpenEditModal={handleOpenEditModal}
+                selectedItemsCount={selectedInactiveItemsCount}
+              />
+            </div>
+          </Slide>
+        </Modal>
+        <Modal
+          open={openEditModal}
+          onClose={handleCloseEditModal}
+          closeAfterTransition
+          BackdropComponent={Backdrop}
+          BackdropProps={{
+            timeout: 500,
+          }}
+        >
+          <Slide 
+            direction="down"
+            in={openEditModal}
+            mountOnEnter
+            unmountOnExit 
+            >
+            <div className={styles["menu-category-page__edit-modal"]}>
+              <EditMenuCategoryModal
+                selectedEditItem={selectedEditItem} 
+                nameEdit={nameEdit}
+                isActiveEdit={isActiveEdit}
+                handleNameEditChange={handleNameEditChange}
+                handleIsActiveEditChange={handleIsActiveEditChange}
+                handleEditModalButtonClicked={handleEditModalButtonClicked}
               />
             </div>
           </Slide>
@@ -317,8 +459,8 @@ const MenuCategoryPage = () => {
         <Navigation />
         <section className={styles["menu-category-page__main-section"]}>
           <section className={styles["menu-category-page__main-top-section"]}>
-            <SaveButton label="Add Menu Category" onClick={handleOpenAddModal}/>
             <InactivateButton label="Inactivate" onClick={handleInactivateClick}/>
+            <SaveButton label="Add Menu Category" onClick={handleOpenAddModal}/>
           </section>
           <section className={styles["menu-category-page__main-bottom-section"]}>
             <DataTable 
@@ -330,13 +472,15 @@ const MenuCategoryPage = () => {
               pageSize={activePageSize}
               totalPages={activeTotalPages}
               sortItems={sortItems}
-              handleItemCheckboxChange={handleActiveItemCheckboxChange}
               isSelectAllChecked={activeIsSelectAllChecked}
+              handleItemCheckboxChange={handleActiveItemCheckboxChange}
               handleSelectAllClick={handleActiveSelectAllClick}
               handlePageNoChange={handleActivePageNoChange} 
               handlePageSizeChange={handleActivePageSizeChange}
               handleSortedByChange={handleActiveSortedByChange}
               handleSortOrderChange={handleActiveSortOrderChange}
+              handleOpenEditModal={handleOpenEditModal}
+              selectedItemsCount={selectedActiveItemsCount}
             />
             <div className={styles["menu-category-page__view-inactive-items-buton"]}>
               <InactiveItemsButton label="View Inactive Menu Categories" onClick={handleOpenViewInactiveModal}/>

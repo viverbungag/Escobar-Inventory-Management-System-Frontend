@@ -37,4 +37,21 @@
         justify-content: center;
         align-items: center;
     }
+
+    &__edit-icon{
+        button{
+            width: fit-content;
+            background-color: transparent;
+            border: 0;
+            padding:0;
+            cursor: pointer;
+        }
+
+        svg{
+            &:hover{
+                color:#f75b75;
+            }
+        }
+
+    }
 }

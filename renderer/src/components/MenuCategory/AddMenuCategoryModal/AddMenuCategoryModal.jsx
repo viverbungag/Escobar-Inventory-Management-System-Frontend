@@ -9,14 +9,14 @@ const AddMenuCategoryModal = ({name, nameOnChange, onClickAddButton}) => {
     <div className={styles["add-menu-category-modal"]}>
         <div className={styles["add-menu-category-modal__title"]}>Add Your Menu Category</div>
         <div className={styles["add-menu-category-modal__text-field"]}>
-        <TextField 
-        id="filled-basic" 
-        label={<span className={styles["add-menu-category-modal__text-placeholder"]}>Input name here</span>}
-        variant="standard"
-        fullWidth 
-        value={name}
-        onChange={nameOnChange}
-        />
+          <TextField 
+              id="filled-basic" 
+              label={<span className={styles["add-menu-category-modal__text-placeholder"]}>Input name here</span>}
+              variant="standard"
+              fullWidth 
+              value={name}
+              onChange={nameOnChange}
+          />
         </div>
         <ModalSaveButton label="Add Menu Category" onClick={onClickAddButton}/>
     </div>

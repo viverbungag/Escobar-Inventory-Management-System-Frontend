@@ -9,7 +9,8 @@ const InactiveMenuCategoryModal = ({headers, rows,
     isSelectAllChecked, handleSelectAllClick, 
     handlePageNoChange, handlePageSizeChange,
     handleSortedByChange, handleSortOrderChange,
-    handleActivateClick}) => {
+    handleActivateClick, handleOpenEditModal, 
+    selectedItemsCount}) => {
   return (
     <div className={styles["inactive-menu-category-modal"]}>
         <DataTable 
@@ -28,6 +29,9 @@ const InactiveMenuCategoryModal = ({headers, rows,
               handlePageSizeChange={handlePageSizeChange}
               handleSortedByChange={handleSortedByChange}
               handleSortOrderChange={handleSortOrderChange}
+              handleOpenEditModal={handleOpenEditModal}
+              selectedItemsCount={selectedItemsCount}
+              tableState="inactive"
             />
             <ActivateButton label="Activate" onClick={handleActivateClick}/>
     </div>
