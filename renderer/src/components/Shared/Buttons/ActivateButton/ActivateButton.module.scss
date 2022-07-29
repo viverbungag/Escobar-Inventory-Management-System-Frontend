@@ -6,7 +6,10 @@
     width: fit-content;
     cursor: pointer;
     
-
+    &:disabled{
+        background-color: #b8dbf0;
+        cursor:default;
+    }
 
     &__container{
         display: flex;

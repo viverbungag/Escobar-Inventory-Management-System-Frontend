@@ -2,14 +2,13 @@
     display: flex;
     flex-direction: column;
     min-width: 100vw;
-    font-family: Helvetica, Arial, sans-serif;
 
     &__upper-section{
         width:100%;
     }
 
     &__lower-section{
-        margin-top: 2.5rem;
+        margin-top: 1.5rem;
         width:100%;
         display: flex;
         justify-content: flex-start;
@@ -39,71 +38,5 @@
     &__view-inactive-items-buton {
         align-self: flex-end;
         padding-right: 1rem;
-    }
-
-    &__add-modal {
-        position: absolute;
-        left: 0;
-        right: 0;
-        margin: 0 auto;
-        width: 20rem;
-        top: 12%;
-        overflow: scroll;
-        min-height: 18rem;
-        max-height: 90%;
-        display: block;
-        border-radius: 10px;
-        background-color: #ffffff;
-        border: 0;
-        -ms-overflow-style: none;
-        scrollbar-width: none;
-
-        &::-webkit-scrollbar{
-            display: none;
-        }
-    }
-
-    &__view-inactive-modal {
-        position: absolute;
-        left: 0;
-        right: 0;
-        margin: 0 auto;
-        width: 70rem;
-        top: 12%;
-        overflow: scroll;
-        min-height: 50rem;
-        max-height: 90%;
-        display: block;
-        border-radius: 10px;
-        background-color: #ffffff;
-        border: 0;
-        -ms-overflow-style: none;
-        scrollbar-width: none;
-
-        &::-webkit-scrollbar{
-            display: none;
-        }
-    }
-
-    &__edit-modal{
-        position: absolute;
-        left: 0;
-        right: 0;
-        margin: 0 auto;
-        width: 30rem;
-        top: 12%;
-        overflow: scroll;
-        min-height: 25rem;
-        max-height: 90%;
-        display: block;
-        border-radius: 10px;
-        background-color: #ffffff;
-        border: 0;
-        -ms-overflow-style: none;
-        scrollbar-width: none;
-
-        &::-webkit-scrollbar{
-            display: none;
-        }
     }
 }

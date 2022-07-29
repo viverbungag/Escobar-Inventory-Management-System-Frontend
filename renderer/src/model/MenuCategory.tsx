@@ -1,20 +1,12 @@
-import axios from "axios";
-import { useEffect } from "react";
-
-
 class MenuCategory{
   menuCategoryId: number;
   menuCategoryName: string;
+  isActive: boolean;
 
-  constructor(menuCategoryId: number, menuCategoryName: string){
+  constructor(menuCategoryId: number, menuCategoryName: string, isActive: boolean){
     this.menuCategoryId = menuCategoryId;
     this.menuCategoryName = menuCategoryName;
-  }
-
-  getTableData(){
-    return {
-      menuCategoryName: this.menuCategoryName
-    }
+    this.isActive = isActive;
   }
 }
 

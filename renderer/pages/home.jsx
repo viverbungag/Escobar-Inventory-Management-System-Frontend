@@ -3,11 +3,12 @@ import MenuCategoryPage from '../src/components/MenuCategory/page/MenuCategoryPa
 
 
 
+
 function Home() {
   return (
-    <>
+    <div>
     <MenuCategoryPage />
-    </>
+    </div>
   );
 };
 

@@ -1,9 +1,31 @@
 .edit-menu-category-modal{
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    padding: 2rem;
-    font-family: Helvetica, Arial, sans-serif;
+    position: absolute;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+    width: 30rem;
+    top: 12%;
+    overflow: scroll;
+    min-height: 25rem;
+    max-height: 90%;
+    display: block;
+    border-radius: 10px;
+    background-color: #ffffff;
+    border: 0;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+
+    &::-webkit-scrollbar{
+        display: none;
+    }
+
+    &__content{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        padding: 2rem;
+        font-family: Helvetica, Arial, sans-serif;
+    }
     
     &__title{
         text-align: center;

@@ -40,7 +40,7 @@ export default function EnhancedTable({headers, rows,
       <table>
         <thead>
           <tr>
-            <td>
+            <td className={styles["data-table__checkbox-column"]}>
               <Checkbox 
                 checked={isSelectAllChecked} 
                 onClick={handleSelectAllClick}
@@ -57,7 +57,7 @@ export default function EnhancedTable({headers, rows,
         <tbody>
           {rows.map((row, index)=>(
             <tr key={index} onClick={()=>{handleItemCheckboxChange(row)}} className={row.isSelected ? styles["data-table__row--selected"]:undefined}>
-              <td><Checkbox checked={row.isSelected}/></td>
+              <td className={styles["data-table__checkbox-column"]}><Checkbox checked={row.isSelected}/></td>
               {headers.map((header) =>(
                 <td key={header.value}>{String(row[header.value])}</td>
               ))}

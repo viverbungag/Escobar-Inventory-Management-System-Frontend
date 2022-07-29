@@ -21,7 +21,8 @@
     "@types/react": "^18.0.15",
     "axios": "^0.27.2",
     "electron-serve": "^1.1.0",
-    "electron-store": "^8.0.1"
+    "electron-store": "^8.0.1",
+    "react-toastify": "^9.0.7"
   },
   "devDependencies": {
     "@babel/core": "^7.18.9",
