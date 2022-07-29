@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import DataTable from "../../Shared/DataTable/DataTable";
-import axios from 'axios';
 import styles from "./MenuCategoryPage.module.scss";
 import WindowControlBar from '../../../components/Shared/WindowControlBar/WindowControlBar';
 import Navigation from "../../Shared/Navigation/Navigation";
@@ -10,11 +9,12 @@ import AddMenuCategoryModal from "../AddMenuCategoryModal/AddMenuCategoryModal";
 import InactiveItemsButton from "../../Shared/Buttons/InactiveItemsButton/InactiveItemsButton";
 import InactiveMenuCategoryModal from "../InactiveMenuCategoryModal/InactiveMenuCategoryModal";
 import EditMenuCategoryModal from "../EditMenuCategoryModal/EditMenuCategoryModal";
-import { toast } from 'react-toastify';
 import Toast from "../../Shared/Toast/Toast";
 import Pagination from 'src/model/Pagination';
-import { getWithPagination } from "../../../rest/rest";
+import Rest from "../../../rest/Rest";
 import MenuCategory from 'src/model/MenuCategory';
+
+const INITIAL_URL = "http://localhost:8080/api/v1";
 
 const headers = [
   {
@@ -51,22 +51,17 @@ const MenuCategoryPage = () => {
     const [selectedActiveItemsCount, setSelectedActiveItemsCount] = useState(0);
     const [selectedInactiveItemsCount, setSelectedInactiveItemsCount] = useState(0);
 
-    const [nameAdd, setNameAdd] = useState("");
-    const [isActiveAdd, setIsActiveAdd] = useState(true);
     const [addedMenuCategory, setAddedMenuCategory] = useState(new MenuCategory(1, "", true));
-
-    const [nameEdit, setNameEdit] = useState("");
-    const [isActiveEdit, setIsActiveEdit] = useState(true);
-
-    const [selectedEditItem, setSelectedEditItem] = useState(null);
+    const [editedMenuCategory, setEditedMenuCategory] = useState(new MenuCategory(1, "", true));
 
     const [openAddModal, setOpenAddModal] = useState(false);
     const [openViewInactiveModal, setOpenViewInactiveModal] = useState(false);
     const [openEditModal, setOpenEditModal] = useState(false);
 
+    const rest = new Rest();
+
     const handleOpenAddModal = () => {
-      setNameAdd("");
-      setIsActiveAdd(true);
+      setAddedMenuCategory(new MenuCategory(1, "", true));
       setOpenAddModal(true);
     };
     const handleCloseAddModal = () => {
@@ -82,10 +77,7 @@ const MenuCategoryPage = () => {
       if(tableState === "inactive"){
         handleInactiveItemCheckboxChange(row);
       }
-      
-      setNameEdit(row.menuCategoryName);
-      setIsActiveEdit(row.isActive);
-      setSelectedEditItem(row);
+      setEditedMenuCategory(new MenuCategory(row.menuCategoryId, row.menuCategoryName, row.isActive));
       setOpenEditModal(true);
     };
     const handleCloseEditModal = () => setOpenEditModal(false);
@@ -98,25 +90,40 @@ const MenuCategoryPage = () => {
     }
 
     const handleNameAddChange = (event) => {
-      setNameAdd(event.target.value);
+      setAddedMenuCategory(new MenuCategory (
+        addedMenuCategory.menuCategoryId,
+        event.target.value,
+        addedMenuCategory.isActive));
     }
 
     const handleIsActiveAddChange = (event) => {
-      setIsActiveAdd(!isActiveAdd);
+      setAddedMenuCategory(new MenuCategory (
+        addedMenuCategory.menuCategoryId,
+        addedMenuCategory.menuCategoryName,
+        !addedMenuCategory.isActive));
     }
 
     const handleNameEditChange = (event) => {
-      setNameEdit(event.target.value);
+      setEditedMenuCategory(new MenuCategory (
+        editedMenuCategory.menuCategoryId,
+        event.target.value,
+        editedMenuCategory.isActive
+      ))
     }
 
     const handleIsActiveEditChange = (event) => {
-      setIsActiveEdit(!isActiveEdit);
+
+      setEditedMenuCategory(new MenuCategory(
+        editedMenuCategory.menuCategoryId,
+        editedMenuCategory.menuCategoryName,
+        !editedMenuCategory.isActive
+      ))
     }
 
     const handleAddModalButtonClicked = () => {
       addMenuCategory();
       setOpenAddModal(false);
-      setNameAdd("");
+      setAddedMenuCategory(new MenuCategory(1, "",true));
       resetToDefault();
     }
 
@@ -139,7 +146,7 @@ const MenuCategoryPage = () => {
     };
 
     const handleActivePageNoChange = (event, newPageNo) => {
-      setActivePagination(new Pagination(
+      setActivePagination(new Pagination (
         newPageNo,
         activePagination.pageSize,
         activePagination.sortedBy,
@@ -148,7 +155,7 @@ const MenuCategoryPage = () => {
     }
 
     const handleInactivePageNoChange = (event, newPageNo) => {
-      setInactivePagination(new Pagination(
+      setInactivePagination(new Pagination (
         newPageNo,
         inactivePagination.pageSize,
         inactivePagination.sortedBy,
@@ -157,7 +164,7 @@ const MenuCategoryPage = () => {
     }
 
     const handleActiveSortedByChange= (event) => {
-      setActivePagination(new Pagination(
+      setActivePagination(new Pagination (
         activePagination.pageNo,
         activePagination.pageSize,
         event.target.value,
@@ -243,13 +250,17 @@ const MenuCategoryPage = () => {
       setInactiveMenuCategories(newMenuCategories);
     }
 
+    const shouldSelectAllItems = () => {
+      return (selectedActiveItemsCount > 0 
+        && selectedActiveItemsCount < activeMenuCategories.length)
+        || selectedActiveItemsCount === 0;
+    }
+
     const handleActiveSelectAllClick = () => {
       let selectedItemsCount = 0;
       const newMenuCategories = activeMenuCategories.map((menuCategory)=>{
 
-        if ((selectedActiveItemsCount > 0 
-          && selectedActiveItemsCount < activeMenuCategories.length)
-          || selectedActiveItemsCount === 0){
+        if (shouldSelectAllItems()){
           menuCategory.isSelected = true;
         }else{
           menuCategory.isSelected= false
@@ -277,9 +288,7 @@ const MenuCategoryPage = () => {
       let selectedItemsCount = 0;
       const newMenuCategories = inactiveMenuCategories.map((menuCategory)=>{
 
-        if ((selectedInactiveItemsCount > 0 
-          && selectedInactiveItemsCount < inactiveMenuCategories.length)
-          || selectedInactiveItemsCount === 0){
+        if (shouldSelectAllItems()){
           menuCategory.isSelected = true;
         }else{
           menuCategory.isSelected= false;
@@ -324,8 +333,8 @@ const MenuCategoryPage = () => {
     }
 
     const getAllActiveMenuCategories = () => {
-      getWithPagination(
-        "http://localhost:8080/api/v1/menu-category/active",
+      rest.getWithPagination(
+        `${INITIAL_URL}/menu-category/active`,
         activePagination.tojson(),
         handleActiveMenuCategoriesLoad,
         handleActiveTotalPagesLoad
@@ -347,52 +356,36 @@ const MenuCategoryPage = () => {
     }
 
     const getAllInactiveMenuCategories = () => {
-      getWithPagination(
-        "http://localhost:8080/api/v1/menu-category/inactive",
+      rest.getWithPagination(
+        `${INITIAL_URL}/menu-category/inactive`,
         inactivePagination.tojson(),
         handleInactiveMenuCategoriesLoad,
         handleInactiveTotalPagesLoad
       )
     }
 
+    const loadAllMenuCategories = () => {
+      getAllActiveMenuCategories();
+      getAllInactiveMenuCategories();
+    }
+
     const addMenuCategory = () => {
-      axios.post("http://localhost:8080/api/v1/menu-category/add",
-      {
-        "menuCategoryId": 1,
-        "menuCategoryName": nameAdd,
-        "isActive": isActiveAdd
-      }
-    )
-    .then(function (response) {
-      if (response.status === 200){
-        getAllActiveMenuCategories();
-        getAllInactiveMenuCategories();
-        toast.success(`Successully added ${nameAdd}`);
-      }
-    })
-    .catch(function (error) {
-      toast.error(error?.response?.data?.message);
-    });
+      rest.add(
+        `${INITIAL_URL}/menu-category/add`, 
+        addedMenuCategory.toJson(), 
+        loadAllMenuCategories, 
+        `Successully added ${addedMenuCategory.menuCategoryName}`
+      )
     }
 
     const updateMenuCategory = () => {
-      axios.put(`http://localhost:8080/api/v1/menu-category/update/${selectedEditItem.menuCategoryId}`,
-      {
-        "menuCategoryId": selectedEditItem.menuCategoryId,
-        "menuCategoryName": nameEdit,
-        "isActive": isActiveEdit
-      }
-    )
-    .then(function (response) {
-      if (response.status === 200){
-        getAllActiveMenuCategories();
-        getAllInactiveMenuCategories();
-        toast.success(`Successully updated Menu Category ${selectedEditItem.menuCategoryId}`);
-      }
-    })
-    .catch(function (error) {
-      toast.error(error?.response?.data?.message);
-    });
+      console.log("entered");
+      rest.update(
+        `${INITIAL_URL}/menu-category/update/${editedMenuCategory.menuCategoryId}`,
+        editedMenuCategory.toJson(),
+        loadAllMenuCategories,
+        `Successully updated Menu Category ${editedMenuCategory.menuCategoryId}`
+      );
     }
 
     const handleActivateClick= () => {
@@ -406,51 +399,32 @@ const MenuCategoryPage = () => {
     }
 
     const activateMenuCategory = () => {
-      axios.post("http://localhost:8080/api/v1/menu-category/activate",
-      {
+      const body = {
         "menuCategoryListDto": inactiveMenuCategories.filter((menuCategories) => menuCategories.isSelected)
       }
-    )
-    .then(function (response) {
-      if(response.status === 200) {
-        getAllInactiveMenuCategories();
-        getAllActiveMenuCategories();
-        
-        toast.success(`Successully activated the selected Menu Categories`);
-      }
-    })
-    .catch(function (error) {
-      toast.error(error?.response?.data?.message);
-    });
+      rest.activate(
+        `${INITIAL_URL}/menu-category/activate`,
+        body,
+        loadAllMenuCategories,
+        `Successully activated the selected Menu Categories`
+      );
     }
 
     const inactivateMenuCategory = () => {
-      axios.post("http://localhost:8080/api/v1/menu-category/inactivate",
-      {
+      const body = {
         "menuCategoryListDto": activeMenuCategories.filter((menuCategories) => menuCategories.isSelected)
       }
-    )
-    .then(function (response) {
-      if (response.status === 200) {
 
-        if (selectedActiveItemsCount === activeMenuCategories.length) {
-          console.log("inactivate selected all");
-          setActivePageNo(-1);
-        }
-
-        getAllActiveMenuCategories();
-        getAllInactiveMenuCategories();
-        toast.success(`Successully inactivated the selected Menu Categories`);
-      }
-    })
-    .catch(function (error) {
-      toast.error(error?.response?.data?.message);
-    });
+      rest.inactivate(
+        `${INITIAL_URL}/menu-category/inactivate`,
+        body,
+        loadAllMenuCategories,
+        `Successully inactivated the selected Menu Categories`
+      );
     }
 
     useEffect (()=>{
-      getAllActiveMenuCategories();
-      getAllInactiveMenuCategories();
+      loadAllMenuCategories();
     }, [activePagination, inactivePagination])
 
 
@@ -458,8 +432,8 @@ const MenuCategoryPage = () => {
     <div className={styles["menu-category-page"]}>
       <Toast />
       <AddMenuCategoryModal 
-        name={nameAdd}
-        isActiveAdd={isActiveAdd}
+        name={addedMenuCategory.menuCategoryName}
+        isActiveAdd={addedMenuCategory.isActive}
         nameOnChange={handleNameAddChange}
         onClickAddButton={handleAddModalButtonClicked}
         openAddModal={openAddModal}
@@ -490,9 +464,9 @@ const MenuCategoryPage = () => {
       />
 
       <EditMenuCategoryModal
-        selectedEditItem={selectedEditItem} 
-        nameEdit={nameEdit}
-        isActiveEdit={isActiveEdit}
+        selectedEditItem={editedMenuCategory} 
+        nameEdit={editedMenuCategory.menuCategoryName}
+        isActiveEdit={editedMenuCategory.isActive}
         handleNameEditChange={handleNameEditChange}
         handleIsActiveEditChange={handleIsActiveEditChange}
         handleEditModalButtonClicked={handleEditModalButtonClicked}

@@ -8,6 +8,14 @@ class MenuCategory{
     this.menuCategoryName = menuCategoryName;
     this.isActive = isActive;
   }
+
+  toJson(){
+    return{
+      menuCategoryId: this.menuCategoryId,
+      menuCategoryName: this.menuCategoryName,
+      isActive: this.isActive
+    }
+  }
 }
 
 export default MenuCategory
