@@ -37,7 +37,7 @@ const EditMenuCategoryModal = ({selectedEditItem, nameEdit, isActiveEdit,
                         <TextField 
                             id="filled-basic" 
                             label={
-                            <span className={styles["add-menu-category-modal__text-placeholder"]}>
+                            <span className={styles["edit-menu-category-modal__text-placeholder"]}>
                                 Menu Category Name</span>}
                             variant="standard"
                             fullWidth 

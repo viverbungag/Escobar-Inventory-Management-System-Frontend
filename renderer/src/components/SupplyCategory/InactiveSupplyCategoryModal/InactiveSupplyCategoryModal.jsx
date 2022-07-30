@@ -1,10 +1,10 @@
 import React from "react";
-import styles from "./InactiveMenuCategoryModal.module.scss";
+import styles from "./InactiveSupplyCategoryModal.module.scss";
 import DataTable from "../../Shared/DataTable/DataTable";
 import ActivateButton from "../../Shared/Buttons/ActivateButton/ActivateButton";
 import { Modal, Slide, Backdrop } from "@mui/material";
 
-const InactiveMenuCategoryModal = ({
+const InactiveSupplyCategoryModal = ({
   headers,
   rows,
   sortOrder,
@@ -42,8 +42,8 @@ const InactiveMenuCategoryModal = ({
         mountOnEnter
         unmountOnExit
       >
-        <div className={styles["inactive-menu-category-modal"]}>
-          <div className={styles["inactive-menu-category-modal__content"]}>
+        <div className={styles["inactive-supply-category-modal"]}>
+          <div className={styles["inactive-supply-category-modal__content"]}>
             <DataTable
               headers={headers}
               rows={rows}
@@ -76,4 +76,4 @@ const InactiveMenuCategoryModal = ({
   );
 };
 
-export default InactiveMenuCategoryModal;
+export default InactiveSupplyCategoryModal;

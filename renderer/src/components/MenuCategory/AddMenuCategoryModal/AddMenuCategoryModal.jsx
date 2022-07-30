@@ -10,7 +10,6 @@ import { Modal, Slide, Backdrop } from "@mui/material";
 const AddMenuCategoryModal = ({name, isActiveAdd, nameOnChange, onClickAddButton, 
   openAddModal, handleCloseAddModal, handleIsActiveAddChange}) => {
   return (
-
     <Modal
     open={openAddModal}
     onClose={handleCloseAddModal}
@@ -51,8 +50,7 @@ const AddMenuCategoryModal = ({name, isActiveAdd, nameOnChange, onClickAddButton
           </div>
         </div>
       </Slide>
-  </Modal>
-
+    </Modal>
   )
 }
 
