@@ -72,7 +72,6 @@ const MenuCategoryPage = () => {
   const rest = new Rest();
 
   const handleOpenAddModal = () => {
-    setAddedMenuCategory(new MenuCategory(1, "", true));
     setOpenAddModal(true);
   };
   const handleCloseAddModal = () => {
@@ -144,9 +143,6 @@ const MenuCategoryPage = () => {
 
   const handleAddModalButtonClicked = () => {
     addMenuCategory();
-    setOpenAddModal(false);
-    setAddedMenuCategory(new MenuCategory(1, "", true));
-    resetToDefault();
   };
 
   const handleActivePageSizeChange = (event) => {
@@ -365,8 +361,8 @@ const MenuCategoryPage = () => {
 
   const handleEditModalButtonClicked = () => {
     updateMenuCategory();
-    setOpenEditModal(false);
-    resetToDefault();
+    // setOpenEditModal(false);
+    // resetToDefault();
   };
 
   const handleActiveMenuCategoriesLoad = (contents) => {
@@ -422,20 +418,33 @@ const MenuCategoryPage = () => {
     getAllInactiveMenuCategories();
   };
 
+  const addSuccessAction = () => {
+    loadAllMenuCategories();
+    setOpenAddModal(false);
+    setAddedMenuCategory(new MenuCategory(1, "", true));
+    resetToDefault();
+  };
+
   const addMenuCategory = () => {
     rest.add(
       `${INITIAL_URL}/menu-category/add`,
       addedMenuCategory.toJson(),
-      loadAllMenuCategories,
+      addSuccessAction,
       `Successully added ${addedMenuCategory.menuCategoryName}`
     );
+  };
+
+  const updateSuccessAction = () => {
+    loadAllMenuCategories();
+    setOpenEditModal(false);
+    resetToDefault();
   };
 
   const updateMenuCategory = () => {
     rest.update(
       `${INITIAL_URL}/menu-category/update/${editedMenuCategory.menuCategoryId}`,
       editedMenuCategory.toJson(),
-      loadAllMenuCategories,
+      updateSuccessAction,
       `Successully updated Menu Category ${editedMenuCategory.menuCategoryId}`
     );
   };

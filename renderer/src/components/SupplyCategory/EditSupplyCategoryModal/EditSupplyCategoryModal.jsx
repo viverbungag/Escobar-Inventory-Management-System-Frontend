@@ -43,9 +43,7 @@ const EditSupplyCategoryModal = ({
                   id="filled-basic"
                   label={
                     <span
-                      className={
-                        styles["edit-supply-category-modal__text-placeholder"]
-                      }
+                      className={styles["edit-supply-category-modal__text"]}
                     >
                       Supply Category Name
                     </span>
@@ -60,7 +58,11 @@ const EditSupplyCategoryModal = ({
                   checked={isActiveEdit}
                   onChange={handleIsActiveEditChange}
                   control={<Switch color="primary" />}
-                  label="Active State"
+                  label={
+                    <span className={styles["add-supply-category-modal__text"]}>
+                      Active State
+                    </span>
+                  }
                   labelPlacement="top"
                 />
               </div>

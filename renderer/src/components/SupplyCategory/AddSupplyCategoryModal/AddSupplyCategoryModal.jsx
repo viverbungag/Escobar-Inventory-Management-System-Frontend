@@ -35,11 +35,7 @@ const AddSupplyCategoryModal = ({
               <TextField
                 id="filled-basic"
                 label={
-                  <span
-                    className={
-                      styles["add-supply-category-modal__text-placeholder"]
-                    }
-                  >
+                  <span className={styles["add-supply-category-modal__text"]}>
                     Input name here
                   </span>
                 }
@@ -53,7 +49,11 @@ const AddSupplyCategoryModal = ({
                 checked={isActiveAdd}
                 onChange={handleIsActiveAddChange}
                 control={<Switch color="primary" />}
-                label="Active State"
+                label={
+                  <span className={styles["add-supply-category-modal__text"]}>
+                    Active State
+                  </span>
+                }
                 labelPlacement="top"
               />
             </div>

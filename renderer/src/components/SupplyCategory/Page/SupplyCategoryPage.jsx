@@ -72,7 +72,6 @@ const SupplyCategoryPage = () => {
   const rest = new Rest();
 
   const handleOpenAddModal = () => {
-    setAddedSupplyCategory(new SupplyCategory(1, "", true));
     setOpenAddModal(true);
   };
   const handleCloseAddModal = () => {
@@ -148,9 +147,7 @@ const SupplyCategoryPage = () => {
 
   const handleAddModalButtonClicked = () => {
     addSupplyCategory();
-    setOpenAddModal(false);
-    setAddedSupplyCategory(new SupplyCategory(1, "", true));
-    resetToDefault();
+    // setOpenAddModal(false);
   };
 
   const handleActivePageSizeChange = (event) => {
@@ -373,8 +370,8 @@ const SupplyCategoryPage = () => {
 
   const handleEditModalButtonClicked = () => {
     updateSupplyCategory();
-    setOpenEditModal(false);
-    resetToDefault();
+    // setOpenEditModal(false);
+    // resetToDefault();
   };
 
   const handleActiveSupplyCategoriesLoad = (contents) => {
@@ -430,20 +427,33 @@ const SupplyCategoryPage = () => {
     getAllInactiveSupplyCategories();
   };
 
+  const addSuccessAction = () => {
+    loadAllSupplyCategories();
+    setOpenAddModal(false);
+    setAddedSupplyCategory(new SupplyCategory(1, "", true));
+    resetToDefault();
+  };
+
   const addSupplyCategory = () => {
     rest.add(
       `${INITIAL_URL}/supply-category/add`,
       addedSupplyCategory.toJson(),
-      loadAllSupplyCategories,
+      addSuccessAction,
       `Successully added ${addedSupplyCategory.supplyCategoryName}`
     );
+  };
+
+  const updateSuccessAction = () => {
+    loadAllSupplyCategories();
+    setOpenEditModal(false);
+    resetToDefault();
   };
 
   const updateSupplyCategory = () => {
     rest.update(
       `${INITIAL_URL}/supply-category/update/${editedSupplyCategory.supplyCategoryId}`,
       editedSupplyCategory.toJson(),
-      loadAllSupplyCategories,
+      updateSuccessAction,
       `Successully updated Supply Category ${editedSupplyCategory.supplyCategoryId}`
     );
   };
