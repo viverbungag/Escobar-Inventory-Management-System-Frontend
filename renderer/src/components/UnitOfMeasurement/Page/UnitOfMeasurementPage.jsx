@@ -1,18 +1,18 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import DataTable from "../../Shared/DataTable/DataTable";
-import styles from "./SupplyCategoryPage.module.scss";
-import WindowControlBar from "../../Shared/WindowControlBar/WindowControlBar";
+import styles from "./UnitOfMeasurementPage.module.scss";
+import WindowControlBar from "../../../components/Shared/WindowControlBar/WindowControlBar";
 import Navigation from "../../Shared/Navigation/Navigation";
 import SaveButton from "../../Shared/Buttons/SaveButton/SaveButton";
 import InactivateButton from "../../Shared/Buttons/InactivateButton/InactivateButton";
 import InactiveItemsButton from "../../Shared/Buttons/InactiveItemsButton/InactiveItemsButton";
-import AddSupplyCategoryModal from "../AddSupplyCategoryModal/AddSupplyCategoryModal";
-import InactiveSupplyCategoryModal from "../InactiveSupplyCategoryModal/InactiveSupplyCategoryModal";
-import EditSupplyCategoryModal from "../EditSupplyCategoryModal/EditSupplyCategoryModal";
+import AddUnitOfMeasurementModal from "../AddUnitOfMeasurementModal/AddUnitOfMeasurementModal";
+import InactiveUnitOfMeasurementModal from "../InactiveUnitOfMeasurementModal/InactiveUnitOfMeasurementModal";
+import EditUnitOfMeasurementModal from "../EditUnitOfMeasurementModal/EditUnitOfMeasurementModal";
 import Toast from "../../Shared/Toast/Toast";
-import Pagination from "src/model/Pagination";
+import Pagination from "../../../model/Pagination";
 import Rest from "../../../rest/Rest";
-import SupplyCategory from "../../../model/SupplyCategory";
+import UnitOfMeasurement from "../../../model/UnitOfMeasurement";
 
 const INITIAL_URL = "http://localhost:8080/api/v1";
 
@@ -20,12 +20,17 @@ const headers = [
   {
     id: "id",
     label: "Id",
-    value: "supplyCategoryId",
+    value: "unitOfMeasurementId",
   },
   {
     id: "name",
     label: "Name",
-    value: "supplyCategoryName",
+    value: "unitOfMeasurementName",
+  },
+  {
+    id: "abbreviation",
+    label: "Abbreviation",
+    value: "unitOfMeasurementAbbreviation",
   },
 ];
 
@@ -33,11 +38,16 @@ const sortItems = [
   {
     label: "Name",
   },
+  {
+    label: "Abbreviation",
+  },
 ];
 
-const SupplyCategoryPage = () => {
-  const [activeSupplyCategories, setActiveSupplyCategories] = useState([]);
-  const [inactiveSupplyCategories, setInactiveSupplyCategories] = useState([]);
+const UnitOfMeasurementPage = () => {
+  const [activeUnitOfMeasurements, setActiveUnitOfMeasurements] = useState([]);
+  const [inactiveUnitOfMeasurements, setInactiveUnitOfMeasurements] = useState(
+    []
+  );
 
   const [activeIsSelectAllChecked, setActiveIsSelectAllChecked] =
     useState(false);
@@ -58,11 +68,11 @@ const SupplyCategoryPage = () => {
   const [selectedInactiveItemsCount, setSelectedInactiveItemsCount] =
     useState(0);
 
-  const [addedSupplyCategory, setAddedSupplyCategory] = useState(
-    new SupplyCategory(1, "", true)
+  const [addedUnitOfMeasurement, setAddedUnitOfMeasurement] = useState(
+    new UnitOfMeasurement(1, "", "", true)
   );
-  const [editedSupplyCategory, setEditedSupplyCategory] = useState(
-    new SupplyCategory(1, "", true)
+  const [editedUnitOfMeasurement, setEditedUnitOfMeasurement] = useState(
+    new UnitOfMeasurement(1, "", "", true)
   );
 
   const [openAddModal, setOpenAddModal] = useState(false);
@@ -87,10 +97,11 @@ const SupplyCategoryPage = () => {
     if (tableState === "inactive") {
       handleInactiveItemCheckboxChange(row);
     }
-    setEditedSupplyCategory(
-      new SupplyCategory(
-        row.supplyCategoryId,
-        row.supplyCategoryName,
+    setEditedUnitOfMeasurement(
+      new UnitOfMeasurement(
+        row.unitOfMeasurementId,
+        row.unitOfMeasurementName,
+        row.unitOfMeasurementAbbreviation,
         row.isActive
       )
     );
@@ -106,47 +117,73 @@ const SupplyCategoryPage = () => {
   };
 
   const handleNameAddChange = (event) => {
-    setAddedSupplyCategory(
-      new SupplyCategory(
-        addedSupplyCategory.supplyCategoryId,
+    setAddedUnitOfMeasurement(
+      new UnitOfMeasurement(
+        addedUnitOfMeasurement.unitOfMeasurementId,
         event.target.value,
-        addedSupplyCategory.isActive
+        addedUnitOfMeasurement.unitOfMeasurementAbbreviation,
+        addedUnitOfMeasurement.isActive
+      )
+    );
+  };
+
+  const handleAbbreviationAddChange = (event) => {
+    setAddedUnitOfMeasurement(
+      new UnitOfMeasurement(
+        addedUnitOfMeasurement.unitOfMeasurementId,
+        addedUnitOfMeasurement.unitOfMeasurementName,
+        event.target.value,
+        addedUnitOfMeasurement.isActive
       )
     );
   };
 
   const handleIsActiveAddChange = (event) => {
-    setAddedSupplyCategory(
-      new SupplyCategory(
-        addedSupplyCategory.supplyCategoryId,
-        addedSupplyCategory.supplyCategoryName,
-        !addedSupplyCategory.isActive
+    setAddedUnitOfMeasurement(
+      new UnitOfMeasurement(
+        addedUnitOfMeasurement.unitOfMeasurementId,
+        addedUnitOfMeasurement.unitOfMeasurementName,
+        addedUnitOfMeasurement.unitOfMeasurementAbbreviation,
+        !addedUnitOfMeasurement.isActive
       )
     );
   };
 
   const handleNameEditChange = (event) => {
-    setEditedSupplyCategory(
-      new SupplyCategory(
-        editedSupplyCategory.supplyCategoryId,
+    setEditedUnitOfMeasurement(
+      new UnitOfMeasurement(
+        editedUnitOfMeasurement.unitOfMeasurementId,
         event.target.value,
-        editedSupplyCategory.isActive
+        editedUnitOfMeasurement.unitOfMeasurementAbbreviation,
+        editedUnitOfMeasurement.isActive
+      )
+    );
+  };
+
+  const handleAbbreviationEditChange = (event) => {
+    setEditedUnitOfMeasurement(
+      new UnitOfMeasurement(
+        editedUnitOfMeasurement.unitOfMeasurementId,
+        editedUnitOfMeasurement.unitOfMeasurementName,
+        event.target.value,
+        editedUnitOfMeasurement.isActive
       )
     );
   };
 
   const handleIsActiveEditChange = (event) => {
-    setEditedSupplyCategory(
-      new SupplyCategory(
-        editedSupplyCategory.supplyCategoryId,
-        editedSupplyCategory.supplyCategoryName,
-        !editedSupplyCategory.isActive
+    setEditedUnitOfMeasurement(
+      new UnitOfMeasurement(
+        editedUnitOfMeasurement.unitOfMeasurementId,
+        editedUnitOfMeasurement.unitOfMeasurementName,
+        editedUnitOfMeasurement.unitOfMeasurementAbbreviation,
+        !editedUnitOfMeasurement.isActive
       )
     );
   };
 
   const handleAddModalButtonClicked = () => {
-    addSupplyCategory();
+    addUnitOfMeasurement();
   };
 
   const handleActivePageSizeChange = (event) => {
@@ -247,18 +284,22 @@ const SupplyCategoryPage = () => {
 
   const handleActiveItemCheckboxChange = (item) => {
     let selectedItemsCount = 0;
-    const newSupplyCategories = activeSupplyCategories.map((supplyCategory) => {
-      if (supplyCategory.supplyCategoryId === item.supplyCategoryId) {
-        supplyCategory.isSelected = !supplyCategory.isSelected;
-      }
+    const newUnitOfMeasurements = activeUnitOfMeasurements.map(
+      (unitOfMeasurement) => {
+        if (
+          unitOfMeasurement.unitOfMeasurementId === item.unitOfMeasurementId
+        ) {
+          unitOfMeasurement.isSelected = !unitOfMeasurement.isSelected;
+        }
 
-      if (supplyCategory.isSelected) {
-        selectedItemsCount++;
+        if (unitOfMeasurement.isSelected) {
+          selectedItemsCount++;
+        }
+        return unitOfMeasurement;
       }
-      return supplyCategory;
-    });
+    );
 
-    if (selectedItemsCount === activeSupplyCategories.length) {
+    if (selectedItemsCount === activeUnitOfMeasurements.length) {
       setActiveIsSelectAllChecked(true);
     }
 
@@ -267,25 +308,27 @@ const SupplyCategoryPage = () => {
     }
 
     setSelectedActiveItemsCount(selectedItemsCount);
-    setActiveSupplyCategories(newSupplyCategories);
+    setActiveUnitOfMeasurements(newUnitOfMeasurements);
   };
 
   const handleInactiveItemCheckboxChange = (item) => {
     let selectedItemsCount = 0;
-    const newSupplyCategories = inactiveSupplyCategories.map(
-      (supplyCategory) => {
-        if (supplyCategory.supplyCategoryId === item.supplyCategoryId) {
-          supplyCategory.isSelected = !supplyCategory.isSelected;
+    const newUnitOfMeasurements = inactiveUnitOfMeasurements.map(
+      (unitOfMeasurement) => {
+        if (
+          unitOfMeasurement.unitOfMeasurementId === item.unitOfMeasurementId
+        ) {
+          unitOfMeasurement.isSelected = !unitOfMeasurement.isSelected;
         }
 
-        if (supplyCategory.isSelected) {
+        if (unitOfMeasurement.isSelected) {
           selectedItemsCount++;
         }
-        return supplyCategory;
+        return unitOfMeasurement;
       }
     );
 
-    if (selectedItemsCount === inactiveSupplyCategories.length) {
+    if (selectedItemsCount === inactiveUnitOfMeasurements.length) {
       setInactiveIsSelectAllChecked(true);
     }
 
@@ -294,88 +337,90 @@ const SupplyCategoryPage = () => {
     }
 
     setSelectedInactiveItemsCount(selectedItemsCount);
-    setInactiveSupplyCategories(newSupplyCategories);
+    setInactiveUnitOfMeasurements(newUnitOfMeasurements);
   };
 
   const handleActiveSelectAllClick = () => {
     let selectedItemsCount = 0;
-    const newSupplyCategories = activeSupplyCategories.map((supplyCategory) => {
-      if (
-        (selectedActiveItemsCount > 0 &&
-          selectedActiveItemsCount < activeSupplyCategories.length) ||
-        selectedActiveItemsCount === 0
-      ) {
-        supplyCategory.isSelected = true;
-      } else {
-        supplyCategory.isSelected = false;
-      }
+    const newUnitOfMeasurements = activeUnitOfMeasurements.map(
+      (unitOfMeasurement) => {
+        if (
+          (selectedActiveItemsCount > 0 &&
+            selectedActiveItemsCount < activeUnitOfMeasurements.length) ||
+          selectedActiveItemsCount === 0
+        ) {
+          unitOfMeasurement.isSelected = true;
+        } else {
+          unitOfMeasurement.isSelected = false;
+        }
 
-      if (supplyCategory.isSelected) {
-        selectedItemsCount++;
-      }
+        if (unitOfMeasurement.isSelected) {
+          selectedItemsCount++;
+        }
 
-      return supplyCategory;
-    });
+        return unitOfMeasurement;
+      }
+    );
 
     setSelectedActiveItemsCount(selectedItemsCount);
 
     if (
-      activeSupplyCategories.length > 0 &&
-      selectedActiveItemsCount === activeSupplyCategories.length
+      activeUnitOfMeasurements.length > 0 &&
+      selectedActiveItemsCount === activeUnitOfMeasurements.length
     ) {
       setActiveIsSelectAllChecked(false);
     } else {
       setActiveIsSelectAllChecked(true);
     }
 
-    setActiveSupplyCategories(newSupplyCategories);
+    setActiveUnitOfMeasurements(newUnitOfMeasurements);
   };
 
   const handleInactiveSelectAllClick = () => {
     let selectedItemsCount = 0;
-    const newSupplyCategories = inactiveSupplyCategories.map(
-      (supplyCategory) => {
+    const newUnitOfMeasurements = inactiveUnitOfMeasurements.map(
+      (unitOfMeasurement) => {
         if (
           (selectedInactiveItemsCount > 0 &&
-            selectedInactiveItemsCount < inactiveSupplyCategories.length) ||
+            selectedInactiveItemsCount < inactiveUnitOfMeasurements.length) ||
           selectedInactiveItemsCount === 0
         ) {
-          supplyCategory.isSelected = true;
+          unitOfMeasurement.isSelected = true;
         } else {
-          supplyCategory.isSelected = false;
+          unitOfMeasurement.isSelected = false;
         }
 
-        if (supplyCategory.isSelected) {
+        if (unitOfMeasurement.isSelected) {
           selectedItemsCount++;
         }
 
-        return supplyCategory;
+        return unitOfMeasurement;
       }
     );
 
     setSelectedInactiveItemsCount(selectedItemsCount);
 
     if (
-      inactiveSupplyCategories.length > 0 &&
-      selectedInactiveItemsCount === inactiveSupplyCategories.length
+      inactiveUnitOfMeasurements.length > 0 &&
+      selectedInactiveItemsCount === inactiveUnitOfMeasurements.length
     ) {
       setInactiveIsSelectAllChecked(false);
     } else {
       setInactiveIsSelectAllChecked(true);
     }
 
-    setInactiveSupplyCategories(newSupplyCategories);
+    setInactiveUnitOfMeasurements(newUnitOfMeasurements);
   };
 
   const handleEditModalButtonClicked = () => {
-    updateSupplyCategory();
+    updateUnitOfMeasurement();
   };
 
-  const handleActiveSupplyCategoriesLoad = (contents) => {
-    setActiveSupplyCategories(
-      contents.map((supplyCategory) => {
+  const handleActiveUnitOfMeasurementsLoad = (contents) => {
+    setActiveUnitOfMeasurements(
+      contents.map((unitOfMeasurement) => {
         return {
-          ...supplyCategory,
+          ...unitOfMeasurement,
           isSelected: false,
         };
       })
@@ -386,20 +431,20 @@ const SupplyCategoryPage = () => {
     setActiveTotalPages(data);
   };
 
-  const getAllActiveSupplyCategories = () => {
+  const getAllActiveUnitOfMeasurements = () => {
     rest.getWithPagination(
-      `${INITIAL_URL}/supply-category/active`,
+      `${INITIAL_URL}/unit-of-measurement/active`,
       activePagination.tojson(),
-      handleActiveSupplyCategoriesLoad,
+      handleActiveUnitOfMeasurementsLoad,
       handleActiveTotalPagesLoad
     );
   };
 
-  const handleInactiveSupplyCategoriesLoad = (contents) => {
-    setInactiveSupplyCategories(
-      contents.map((supplyCategory) => {
+  const handleInactiveUnitOfMeasurementsLoad = (contents) => {
+    setInactiveUnitOfMeasurements(
+      contents.map((unitOfMeasurement) => {
         return {
-          ...supplyCategory,
+          ...unitOfMeasurement,
           isSelected: false,
         };
       })
@@ -410,108 +455,111 @@ const SupplyCategoryPage = () => {
     setInactiveTotalPages(data);
   };
 
-  const getAllInactiveSupplyCategories = () => {
+  const getAllInactiveUnitOfMeasurements = () => {
     rest.getWithPagination(
-      `${INITIAL_URL}/supply-category/inactive`,
+      `${INITIAL_URL}/unit-of-measurement/inactive`,
       inactivePagination.tojson(),
-      handleInactiveSupplyCategoriesLoad,
+      handleInactiveUnitOfMeasurementsLoad,
       handleInactiveTotalPagesLoad
     );
   };
 
-  const loadAllSupplyCategories = () => {
-    getAllActiveSupplyCategories();
-    getAllInactiveSupplyCategories();
+  const loadAllUnitOfMeasurements = () => {
+    getAllActiveUnitOfMeasurements();
+    getAllInactiveUnitOfMeasurements();
   };
 
   const addSuccessAction = () => {
-    loadAllSupplyCategories();
+    loadAllUnitOfMeasurements();
     setOpenAddModal(false);
-    setAddedSupplyCategory(new SupplyCategory(1, "", true));
+    setAddedUnitOfMeasurement(new UnitOfMeasurement(1, "", "", true));
     resetToDefault();
   };
 
-  const addSupplyCategory = () => {
+  const addUnitOfMeasurement = () => {
     rest.add(
-      `${INITIAL_URL}/supply-category/add`,
-      addedSupplyCategory.toJson(),
+      `${INITIAL_URL}/unit-of-measurement/add`,
+      addedUnitOfMeasurement.toJson(),
       addSuccessAction,
-      `Successully added ${addedSupplyCategory.supplyCategoryName}`
+      `Successully added ${addedUnitOfMeasurement.unitOfMeasurementName}`
     );
   };
 
   const updateSuccessAction = () => {
-    loadAllSupplyCategories();
+    loadAllUnitOfMeasurements();
     setOpenEditModal(false);
     resetToDefault();
   };
 
-  const updateSupplyCategory = () => {
+  const updateUnitOfMeasurement = () => {
     rest.update(
-      `${INITIAL_URL}/supply-category/update/${editedSupplyCategory.supplyCategoryId}`,
-      editedSupplyCategory.toJson(),
+      `${INITIAL_URL}/unit-of-measurement/update/${editedUnitOfMeasurement.unitOfMeasurementId}`,
+      editedUnitOfMeasurement.toJson(),
       updateSuccessAction,
-      `Successully updated Supply Category ${editedSupplyCategory.supplyCategoryId}`
+      `Successully updated Unit of Measurement ${editedUnitOfMeasurement.unitOfMeasurementId}`
     );
   };
 
   const handleActivateClick = () => {
-    activateSupplyCategory();
+    activateUnitOfMeasurements();
     resetToDefault();
   };
 
   const handleInactivateClick = () => {
-    inactivateSupplyCategory();
+    inactivateUnitOfMeasurements();
     resetToDefault();
   };
 
-  const activateSupplyCategory = () => {
+  const activateUnitOfMeasurements = () => {
     const body = {
-      supplyCategoryListDto: inactiveSupplyCategories.filter(
-        (supplyCategories) => supplyCategories.isSelected
+      unitOfMeasurementListDto: inactiveUnitOfMeasurements.filter(
+        (unitOfMeasurement) => unitOfMeasurement.isSelected
       ),
     };
     rest.activate(
-      `${INITIAL_URL}/supply-category/activate`,
+      `${INITIAL_URL}/unit-of-measurement/activate`,
       body,
-      loadAllSupplyCategories,
-      `Successully activated the selected Supply Categories`
+      loadAllUnitOfMeasurements,
+      `Successully activated the selected Unit of Measurements`
     );
   };
 
-  const inactivateSupplyCategory = () => {
+  const inactivateUnitOfMeasurements = () => {
     const body = {
-      supplyCategoryListDto: activeSupplyCategories.filter(
-        (supplyCategories) => supplyCategories.isSelected
+      unitOfMeasurementListDto: activeUnitOfMeasurements.filter(
+        (unitOfMeasurement) => unitOfMeasurement.isSelected
       ),
     };
-    rest.activate(
-      `${INITIAL_URL}/supply-category/inactivate`,
+
+    rest.inactivate(
+      `${INITIAL_URL}/unit-of-measurement/inactivate`,
       body,
-      loadAllSupplyCategories,
-      `Successully inactivated the selected Supply Categories`
+      loadAllUnitOfMeasurements,
+      `Successully inactivated the selected Unit of Measurements`
     );
   };
 
   useEffect(() => {
-    loadAllSupplyCategories();
+    loadAllUnitOfMeasurements();
   }, [activePagination, inactivePagination]);
 
   return (
-    <div className={styles["supply-category-page"]}>
+    <div className={styles["unit-of-measurement-page"]}>
       <Toast />
-      <AddSupplyCategoryModal
-        name={addedSupplyCategory.supplyCategoryName}
-        isActiveAdd={addedSupplyCategory.isActive}
+      <AddUnitOfMeasurementModal
+        name={addedUnitOfMeasurement.unitOfMeasurementName}
+        isActiveAdd={addedUnitOfMeasurement.isActive}
+        abbreviation={addedUnitOfMeasurement.unitOfMeasurementAbbreviation}
         nameOnChange={handleNameAddChange}
+        abbreviationOnChange={handleAbbreviationAddChange}
         onClickAddButton={handleAddModalButtonClicked}
         openAddModal={openAddModal}
         handleCloseAddModal={handleCloseAddModal}
         handleIsActiveAddChange={handleIsActiveAddChange}
       />
-      <InactiveSupplyCategoryModal
+      <InactiveUnitOfMeasurementModal
         headers={headers}
-        rows={inactiveSupplyCategories}
+        rows={inactiveUnitOfMeasurements}
         sortOrder={inactivePagination.isAscending ? "Ascending" : "Descending"}
         sortedBy={inactivePagination.sortedBy}
         pageNo={inactivePagination.pageNo}
@@ -532,41 +580,45 @@ const SupplyCategoryPage = () => {
         handleCloseViewInactiveModal={handleCloseViewInactiveModal}
       />
 
-      <EditSupplyCategoryModal
-        selectedEditItem={editedSupplyCategory}
-        nameEdit={editedSupplyCategory.supplyCategoryName}
-        isActiveEdit={editedSupplyCategory.isActive}
+      <EditUnitOfMeasurementModal
+        selectedEditItem={editedUnitOfMeasurement}
+        nameEdit={editedUnitOfMeasurement.unitOfMeasurementName}
+        abbreviation={editedUnitOfMeasurement.unitOfMeasurementAbbreviation}
+        isActiveEdit={editedUnitOfMeasurement.isActive}
         handleNameEditChange={handleNameEditChange}
+        handleAbbreviationChange={handleAbbreviationEditChange}
         handleIsActiveEditChange={handleIsActiveEditChange}
         handleEditModalButtonClicked={handleEditModalButtonClicked}
         openEditModal={openEditModal}
         handleCloseEditModal={handleCloseEditModal}
       />
 
-      <section className={styles["supply-category-page__upper-section"]}>
+      <section className={styles["unit-of-measurement-page__upper-section"]}>
         <WindowControlBar />
       </section>
 
-      <section className={styles["supply-category-page__lower-section"]}>
+      <section className={styles["unit-of-measurement-page__lower-section"]}>
         <Navigation />
-        <section className={styles["supply-category-page__main-section"]}>
-          <section className={styles["supply-category-page__main-top-section"]}>
+        <section className={styles["unit-of-measurement-page__main-section"]}>
+          <section
+            className={styles["unit-of-measurement-page__main-top-section"]}
+          >
             <InactivateButton
               label="Inactivate"
               onClick={handleInactivateClick}
               disableCondition={selectedActiveItemsCount <= 0}
             />
             <SaveButton
-              label="Add Supply Category"
+              label="Add Unit of Measurement"
               onClick={handleOpenAddModal}
             />
           </section>
           <section
-            className={styles["supply-category-page__main-bottom-section"]}
+            className={styles["unit-of-measurement-page__main-bottom-section"]}
           >
             <DataTable
               headers={headers}
-              rows={activeSupplyCategories}
+              rows={activeUnitOfMeasurements}
               sortOrder={
                 activePagination.isAscending ? "Ascending" : "Descending"
               }
@@ -588,11 +640,11 @@ const SupplyCategoryPage = () => {
             />
             <div
               className={
-                styles["supply-category-page__view-inactive-items-buton"]
+                styles["unit-of-measurement-page__view-inactive-items-buton"]
               }
             >
               <InactiveItemsButton
-                label="View Inactive Supply Categories"
+                label="View Inactive Unit of Measurements"
                 onClick={handleOpenViewInactiveModal}
               />
             </div>
@@ -603,4 +655,4 @@ const SupplyCategoryPage = () => {
   );
 };
 
-export default SupplyCategoryPage;
+export default UnitOfMeasurementPage;

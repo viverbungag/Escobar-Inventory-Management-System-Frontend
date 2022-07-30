@@ -1,8 +1,9 @@
-import React from "react";
 import MenuCategoryPage from "../src/components/MenuCategory/Page/MenuCategoryPage";
 
-function Home() {
-  return <MenuCategoryPage />;
-}
+import React from "react";
 
-export default Home;
+const menuCategory = () => {
+  return <MenuCategoryPage />;
+};
+
+export default menuCategory;

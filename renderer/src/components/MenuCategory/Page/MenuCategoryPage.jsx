@@ -10,7 +10,7 @@ import AddMenuCategoryModal from "../AddMenuCategoryModal/AddMenuCategoryModal";
 import InactiveMenuCategoryModal from "../InactiveMenuCategoryModal/InactiveMenuCategoryModal";
 import EditMenuCategoryModal from "../EditMenuCategoryModal/EditMenuCategoryModal";
 import Toast from "../../Shared/Toast/Toast";
-import Pagination from "src/model/Pagination";
+import Pagination from "../../../model/Pagination";
 import Rest from "../../../rest/Rest";
 import MenuCategory from "src/model/MenuCategory";
 
