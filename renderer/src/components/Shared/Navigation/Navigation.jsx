@@ -67,12 +67,15 @@ const Navigation = () => {
 
       <div className={styles["navigation__title"]}>OTHERS</div>
       <div className={styles["navigation__list"]}>
-        <div className={styles["navigation__item-container"]}>
-          <div className={styles["navigation__item-icon"]}>
-            <GroupIcon />
+        <Link href="/supplier">
+          <div className={styles["navigation__item-container"]}>
+            <div className={styles["navigation__item-icon"]}>
+              <GroupIcon />
+            </div>
+            <div className={styles["navigation__item-text"]}>Supplier</div>
           </div>
-          <div className={styles["navigation__item-text"]}>Supplier</div>
-        </div>
+        </Link>
+
         <Link href="/menu-category">
           <div className={styles["navigation__item-container"]}>
             <div className={styles["navigation__item-icon"]}>
