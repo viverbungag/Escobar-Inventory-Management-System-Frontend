@@ -1,12 +1,12 @@
-import * as React from 'react';
-import { useTheme } from '@mui/material/styles';
-import Box from '@mui/material/Box';
-import OutlinedInput from '@mui/material/OutlinedInput';
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import Select from '@mui/material/Select';
-import Chip from '@mui/material/Chip';
+import * as React from "react";
+import { useTheme } from "@mui/material/styles";
+import Box from "@mui/material/Box";
+import OutlinedInput from "@mui/material/OutlinedInput";
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
+import FormControl from "@mui/material/FormControl";
+import Select from "@mui/material/Select";
+import Chip from "@mui/material/Chip";
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -28,7 +28,11 @@ function getStyles(name, personName, theme) {
   };
 }
 
-export default function MultipleSelectChip({items, selectedItems, handleChange}) {
+export default function MultipleSelectChip({
+  items,
+  selectedItems,
+  handleChange,
+}) {
   const theme = useTheme();
 
   return (
@@ -43,7 +47,7 @@ export default function MultipleSelectChip({items, selectedItems, handleChange})
           onChange={handleChange}
           input={<OutlinedInput id="select-multiple-chip" label="Chip" />}
           renderValue={(selected) => (
-            <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
+            <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
               {selected.map((value) => (
                 <Chip key={value} label={value} />
               ))}
@@ -51,9 +55,9 @@ export default function MultipleSelectChip({items, selectedItems, handleChange})
           )}
           MenuProps={MenuProps}
         >
-          {items.map((name) => (
+          {items.map((name, index) => (
             <MenuItem
-              key={name}
+              key={name + index}
               value={name}
               style={getStyles(name, selectedItems, theme)}
             >

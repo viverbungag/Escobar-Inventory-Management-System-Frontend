@@ -2,6 +2,19 @@ import axios from "axios";
 import { toast } from "react-toastify";
 
 class Rest {
+  get(url: string, handleSuccessAction: Function) {
+    axios
+      .get(url)
+      .then(function (response) {
+        if (response.status === 200) {
+          handleSuccessAction(response.data);
+        }
+      })
+      .catch(function (error) {
+        toast.error(error?.response?.data?.message);
+      });
+  }
+
   getWithPagination(
     url: string,
     body: Object,

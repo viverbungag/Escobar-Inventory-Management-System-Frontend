@@ -30,13 +30,14 @@ const Navigation = () => {
           </div>
           <div className={styles["navigation__item-text"]}>Menu</div>
         </div>
-
-        <div className={styles["navigation__item-container"]}>
-          <div className={styles["navigation__item-icon"]}>
-            <KitchenIcon />
+        <Link href="/supply">
+          <div className={styles["navigation__item-container"]}>
+            <div className={styles["navigation__item-icon"]}>
+              <KitchenIcon />
+            </div>
+            <div className={styles["navigation__item-text"]}>Supply</div>
           </div>
-          <div className={styles["navigation__item-text"]}>Supply</div>
-        </div>
+        </Link>
       </div>
 
       <div className={styles["navigation__title"]}>TRANSACTIONS</div>

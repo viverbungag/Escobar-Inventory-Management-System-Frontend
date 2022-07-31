@@ -101,7 +101,7 @@ const EditSupplierModal = ({
                   onChange={handleIsActiveEditChange}
                   control={<Switch color="primary" />}
                   label={
-                    <span className={styles["add-supplier-modal__text"]}>
+                    <span className={styles["edit-supplier-modal__text"]}>
                       Active State
                     </span>
                   }

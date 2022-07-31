@@ -86,11 +86,13 @@ export default function EnhancedTable({
                 <td className={styles["data-table__checkbox-column"]}>
                   <Checkbox checked={row.isSelected} />
                 </td>
-                {headers.map((header, index) => (
-                  <td key={row[header.value] + index}>
-                    {String(row[header.value])}
-                  </td>
-                ))}
+                {headers.map((header, index) => {
+                  return (
+                    <td key={Object.values(row)[1] + index}>
+                      {String(row[header.value])}
+                    </td>
+                  );
+                })}
                 <td className={styles["data-table__edit-icon"]}>
                   <button onClick={() => handleOpenEditModal(row, tableState)}>
                     <Icon icon={editIcon} width="20" height="20" />

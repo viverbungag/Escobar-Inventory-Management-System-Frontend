@@ -18,9 +18,9 @@ const SortSelect = ({ sortItems, selectedSort, handleChange }) => {
         <MenuItem value="None">
           <em>None</em>
         </MenuItem>
-        {sortItems.map((sortItem) => {
+        {sortItems.map((sortItem, index) => {
           return (
-            <MenuItem key={sortItem.label} value={sortItem.label}>
+            <MenuItem key={sortItem.label + index} value={sortItem.label}>
               {sortItem.label}
             </MenuItem>
           );
