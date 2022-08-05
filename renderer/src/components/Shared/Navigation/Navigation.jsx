@@ -12,26 +12,44 @@ import ShoppingBagIcon from "@mui/icons-material/ShoppingBag";
 import StraightenIcon from "@mui/icons-material/Straighten";
 import Link from "next/link";
 
-const Navigation = () => {
+const Navigation = ({ page }) => {
   return (
     <div className={styles["navigation"]}>
       <div className={styles["navigation__title"]}>NAVIGATION</div>
       <div className={styles["navigation__list"]}>
-        <div className={styles["navigation__item-container"]}>
+        <div
+          className={[
+            styles["navigation__item-container"],
+            page === "dashboard" &&
+              styles["navigation__item-container--selected"],
+          ].join(" ")}
+        >
           <div className={styles["navigation__item-icon"]}>
             <DashboardIcon />
           </div>
           <div className={styles["navigation__item-text"]}>Dashboard</div>
         </div>
-
-        <div className={styles["navigation__item-container"]}>
-          <div className={styles["navigation__item-icon"]}>
-            <RestaurantMenuIcon />
+        <Link href="/menu">
+          <div
+            className={[
+              styles["navigation__item-container"],
+              page === "menu" && styles["navigation__item-container--selected"],
+            ].join(" ")}
+          >
+            <div className={styles["navigation__item-icon"]}>
+              <RestaurantMenuIcon />
+            </div>
+            <div className={styles["navigation__item-text"]}>Menu</div>
           </div>
-          <div className={styles["navigation__item-text"]}>Menu</div>
-        </div>
+        </Link>
         <Link href="/supply">
-          <div className={styles["navigation__item-container"]}>
+          <div
+            className={[
+              styles["navigation__item-container"],
+              page === "supply" &&
+                styles["navigation__item-container--selected"],
+            ].join(" ")}
+          >
             <div className={styles["navigation__item-icon"]}>
               <KitchenIcon />
             </div>
@@ -69,7 +87,13 @@ const Navigation = () => {
       <div className={styles["navigation__title"]}>OTHERS</div>
       <div className={styles["navigation__list"]}>
         <Link href="/supplier">
-          <div className={styles["navigation__item-container"]}>
+          <div
+            className={[
+              styles["navigation__item-container"],
+              page === "supplier" &&
+                styles["navigation__item-container--selected"],
+            ].join(" ")}
+          >
             <div className={styles["navigation__item-icon"]}>
               <GroupIcon />
             </div>
@@ -78,7 +102,13 @@ const Navigation = () => {
         </Link>
 
         <Link href="/menu-category">
-          <div className={styles["navigation__item-container"]}>
+          <div
+            className={[
+              styles["navigation__item-container"],
+              page === "menu-category" &&
+                styles["navigation__item-container--selected"],
+            ].join(" ")}
+          >
             <div className={styles["navigation__item-icon"]}>
               <BrunchDiningIcon />
             </div>
@@ -87,7 +117,13 @@ const Navigation = () => {
         </Link>
 
         <Link href="/supply-category">
-          <div className={styles["navigation__item-container"]}>
+          <div
+            className={[
+              styles["navigation__item-container"],
+              page === "supply-category" &&
+                styles["navigation__item-container--selected"],
+            ].join(" ")}
+          >
             <div className={styles["navigation__item-icon"]}>
               <ShoppingBagIcon />
             </div>
@@ -98,7 +134,13 @@ const Navigation = () => {
         </Link>
 
         <Link href="/unit-of-measurement">
-          <div className={styles["navigation__item-container"]}>
+          <div
+            className={[
+              styles["navigation__item-container"],
+              page === "unit-of-measurement" &&
+                styles["navigation__item-container--selected"],
+            ].join(" ")}
+          >
             <div className={styles["navigation__item-icon"]}>
               <StraightenIcon />
             </div>

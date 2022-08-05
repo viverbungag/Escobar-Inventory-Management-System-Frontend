@@ -61,6 +61,7 @@ export default function EnhancedTable({
                 indeterminate={
                   selectedItemsCount > 0 && selectedItemsCount < rows.length
                 }
+                disabled={rows.length === 0}
               />
             </td>
             {headers.map((header, index) => (

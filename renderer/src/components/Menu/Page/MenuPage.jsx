@@ -1,18 +1,18 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import DataTable from "../../Shared/DataTable/DataTable";
-import styles from "./MenuCategoryPage.module.scss";
-import WindowControlBar from "../../../components/Shared/WindowControlBar/WindowControlBar";
+import styles from "./MenuPage.module.scss";
+import WindowControlBar from "../../Shared/WindowControlBar/WindowControlBar";
 import Navigation from "../../Shared/Navigation/Navigation";
 import SaveButton from "../../Shared/Buttons/SaveButton/SaveButton";
 import InactivateButton from "../../Shared/Buttons/InactivateButton/InactivateButton";
 import InactiveItemsButton from "../../Shared/Buttons/InactiveItemsButton/InactiveItemsButton";
-import AddMenuCategoryModal from "../AddMenuCategoryModal/AddMenuCategoryModal";
-import InactiveMenuCategoryModal from "../InactiveMenuCategoryModal/InactiveMenuCategoryModal";
-import EditMenuCategoryModal from "../EditMenuCategoryModal/EditMenuCategoryModal";
+import AddMenuModal from "../AddMenuModal/AddMenuModal";
+import InactiveMenuModal from "../InactiveMenuModal/InactiveMenuModal";
+import EditMenuModal from "../EditMenuModal/EditMenuModal";
 import Toast from "../../Shared/Toast/Toast";
-import Pagination from "../../../model/Pagination";
+import Pagination from "src/model/Pagination";
 import Rest from "../../../rest/Rest";
-import MenuCategory from "src/model/MenuCategory";
+import Menu from "../../../model/Menu";
 
 const INITIAL_URL = "http://localhost:8080/api/v1";
 
@@ -20,12 +20,27 @@ const headers = [
   {
     id: "id",
     label: "Id",
-    value: "menuCategoryId",
+    value: "menuId",
   },
   {
     id: "name",
     label: "Name",
+    value: "menuName",
+  },
+  {
+    id: "price",
+    label: "Price",
+    value: "menuPrice",
+  },
+  {
+    id: "menuCategory",
+    label: "Menu Category",
     value: "menuCategoryName",
+  },
+  {
+    id: "servingsLeft",
+    label: "Servings Left",
+    value: "numberOfServingsLeft",
   },
 ];
 
@@ -33,11 +48,17 @@ const sortItems = [
   {
     label: "Name",
   },
+  {
+    label: "Price",
+  },
+  {
+    label: "Menu Category",
+  }
 ];
 
-const MenuCategoryPage = () => {
-  const [activeMenuCategories, setActiveMenuCategories] = useState([]);
-  const [inactiveMenuCategories, setInactiveMenuCategories] = useState([]);
+const MenuPage = () => {
+  const [activeMenus, setActiveMenus] = useState([]);
+  const [inactiveMenus, setInactiveMenus] = useState([]);
 
   const [activeIsSelectAllChecked, setActiveIsSelectAllChecked] =
     useState(false);
@@ -58,20 +79,27 @@ const MenuCategoryPage = () => {
   const [selectedInactiveItemsCount, setSelectedInactiveItemsCount] =
     useState(0);
 
-  const [addedMenuCategory, setAddedMenuCategory] = useState(
-    new MenuCategory(1, "", true)
+  const [addedMenu, setAddedMenu] = useState(
+    new Menu(1, "", 0, "", [], 0, true)
   );
-  const [editedMenuCategory, setEditedMenuCategory] = useState(
-    new MenuCategory(1, "", true)
+  const [editedMenu, setEditedMenu] = useState(
+    new Menu(1, "", 0, "", [], 0, true)
   );
 
   const [openAddModal, setOpenAddModal] = useState(false);
   const [openViewInactiveModal, setOpenViewInactiveModal] = useState(false);
   const [openEditModal, setOpenEditModal] = useState(false);
 
+  const [activeMenuCategories, setActiveMenuCategories] = useState([]);
+  const [activeIngredients, setActiveIngredients] = useState([]);
+  //   const [activeUnitOfMeasurements, setActiveUnitOfMeasurements] = useState([]);
+  //   const [activeSupplyCategories, setActiveSupplyCategories] = useState([]);
+
   const rest = new Rest();
 
   const handleOpenAddModal = () => {
+    setAddedMenu(new Menu(1, "", 0, activeMenuCategories[0], [], 0, true));
+
     setOpenAddModal(true);
   };
   const handleCloseAddModal = () => {
@@ -87,8 +115,16 @@ const MenuCategoryPage = () => {
     if (tableState === "inactive") {
       handleInactiveItemCheckboxChange(row);
     }
-    setEditedMenuCategory(
-      new MenuCategory(row.menuCategoryId, row.menuCategoryName, row.isActive)
+    setEditedMenu(
+      new Menu(
+        row.menuId,
+        row.menuName,
+        row.menuPrice,
+        row.menuCategoryName,
+        row.ingredients,
+        row.numberOfServingsLeft,
+        row.isActive
+      )
     );
     setOpenEditModal(true);
   };
@@ -102,47 +138,148 @@ const MenuCategoryPage = () => {
   };
 
   const handleNameAddChange = (event) => {
-    setAddedMenuCategory(
-      new MenuCategory(
-        addedMenuCategory.menuCategoryId,
+    setAddedMenu(
+      new Menu(
+        addedMenu.menuId,
         event.target.value,
-        addedMenuCategory.isActive
+        addedMenu.menuPrice,
+        addedMenu.menuCategoryName,
+        addedMenu.ingredients,
+        addedMenu.numberOfServingsLeft,
+        addedMenu.isActive
+      )
+    );
+  };
+
+  const handlePriceAddChange = (event) => {
+    setAddedMenu(
+      new Menu(
+        addedMenu.menuId,
+        addedMenu.menuName,
+        event.target.value,
+        addedMenu.menuCategoryName,
+        addedMenu.ingredients,
+        addedMenu.numberOfServingsLeft,
+        addedMenu.isActive
+      )
+    );
+  };
+
+  const handleMenuCategoryAddChange = (event) => {
+    setAddedMenu(
+      new Menu(
+        addedMenu.menuId,
+        addedMenu.menuName,
+        addedMenu.menuPrice,
+        event.target.value,
+        addedMenu.ingredients,
+        addedMenu.numberOfServingsLeft,
+        addedMenu.isActive
+      )
+    );
+  };
+
+  const handleIngredientsAddChange = (newIngredients) => {
+    setAddedMenu(
+      new Menu(
+        addedMenu.menuId,
+        addedMenu.menuName,
+        addedMenu.menuPrice,
+        addedMenu.menuCategoryName,
+        newIngredients,
+        addedMenu.numberOfServingsLeft,
+        addedMenu.isActive
       )
     );
   };
 
   const handleIsActiveAddChange = (event) => {
-    setAddedMenuCategory(
-      new MenuCategory(
-        addedMenuCategory.menuCategoryId,
-        addedMenuCategory.menuCategoryName,
-        !addedMenuCategory.isActive
+    setAddedMenu(
+      new Menu(
+        addedMenu.menuId,
+        addedMenu.menuName,
+        addedMenu.menuPrice,
+        addedMenu.menuCategoryName,
+        addedMenu.ingredients,
+        addedMenu.numberOfServingsLeft,
+        !addedMenu.isActive
       )
     );
   };
 
   const handleNameEditChange = (event) => {
-    setEditedMenuCategory(
-      new MenuCategory(
-        editedMenuCategory.menuCategoryId,
+    setEditedMenu(
+      new Menu(
+        editedMenu.menuId,
         event.target.value,
-        editedMenuCategory.isActive
+        editedMenu.menuPrice,
+        editedMenu.menuCategoryName,
+        editedMenu.ingredients,
+        editedMenu.numberOfServingsLeft,
+        editedMenu.isActive
+      )
+    );
+  };
+
+  const handlePriceEditChange = (event) => {
+    setEditedMenu(
+      new Menu(
+        editedMenu.menuId,
+        editedMenu.menuName,
+        event.target.value,
+        editedMenu.menuCategoryName,
+        editedMenu.ingredients,
+        editedMenu.numberOfServingsLeft,
+        editedMenu.isActive
+      )
+    );
+  };
+
+  const handleMenuCategoryEditChange = (event) => {
+    setEditedMenu(
+      new Menu(
+        editedMenu.menuId,
+        editedMenu.menuName,
+        editedMenu.menuPrice,
+        event.target.value,
+        editedMenu.ingredients,
+        editedMenu.numberOfServingsLeft,
+        editedMenu.isActive
+      )
+    );
+  };
+
+  const handleIngredientsEditChange = (newIngredients) => {
+    console.log(newIngredients);
+    setEditedMenu(
+      new Menu(
+        editedMenu.menuId,
+        editedMenu.menuName,
+        editedMenu.menuPrice,
+        editedMenu.menuCategoryName,
+        newIngredients,
+        editedMenu.numberOfServingsLeft,
+        editedMenu.isActive
       )
     );
   };
 
   const handleIsActiveEditChange = (event) => {
-    setEditedMenuCategory(
-      new MenuCategory(
-        editedMenuCategory.menuCategoryId,
-        editedMenuCategory.menuCategoryName,
-        !editedMenuCategory.isActive
+    setEditedMenu(
+      new Menu(
+        editedMenu.menuId,
+        editedMenu.menuName,
+        editedMenu.menuPrice,
+        editedMenu.menuCategoryName,
+        editedMenu.ingredients,
+        editedMenu.numberOfServingsLeft,
+        !editedMenu.isActive
       )
     );
   };
 
   const handleAddModalButtonClicked = () => {
-    addMenuCategory();
+    addMenu();
   };
 
   const handleActivePageSizeChange = (event) => {
@@ -243,18 +380,18 @@ const MenuCategoryPage = () => {
 
   const handleActiveItemCheckboxChange = (item) => {
     let selectedItemsCount = 0;
-    const newMenuCategories = activeMenuCategories.map((menuCategory) => {
-      if (menuCategory.menuCategoryId === item.menuCategoryId) {
-        menuCategory.isSelected = !menuCategory.isSelected;
+    const newMenus = activeMenus.map((menu) => {
+      if (menu.menuId === item.menuId) {
+        menu.isSelected = !menu.isSelected;
       }
 
-      if (menuCategory.isSelected) {
+      if (menu.isSelected) {
         selectedItemsCount++;
       }
-      return menuCategory;
+      return menu;
     });
 
-    if (selectedItemsCount === activeMenuCategories.length) {
+    if (selectedItemsCount === activeMenus.length) {
       setActiveIsSelectAllChecked(true);
     }
 
@@ -263,23 +400,23 @@ const MenuCategoryPage = () => {
     }
 
     setSelectedActiveItemsCount(selectedItemsCount);
-    setActiveMenuCategories(newMenuCategories);
+    setActiveMenus(newMenus);
   };
 
   const handleInactiveItemCheckboxChange = (item) => {
     let selectedItemsCount = 0;
-    const newMenuCategories = inactiveMenuCategories.map((menuCategory) => {
-      if (menuCategory.menuCategoryId === item.menuCategoryId) {
-        menuCategory.isSelected = !menuCategory.isSelected;
+    const newMenus = inactiveMenus.map((menu) => {
+      if (menu.menuId === item.menuId) {
+        menu.isSelected = !menu.isSelected;
       }
 
-      if (menuCategory.isSelected) {
+      if (menu.isSelected) {
         selectedItemsCount++;
       }
-      return menuCategory;
+      return menu;
     });
 
-    if (selectedItemsCount === inactiveMenuCategories.length) {
+    if (selectedItemsCount === inactiveMenus.length) {
       setInactiveIsSelectAllChecked(true);
     }
 
@@ -288,112 +425,126 @@ const MenuCategoryPage = () => {
     }
 
     setSelectedInactiveItemsCount(selectedItemsCount);
-    setInactiveMenuCategories(newMenuCategories);
+    setInactiveMenus(newMenus);
   };
 
   const handleActiveSelectAllClick = () => {
     let selectedItemsCount = 0;
-    const newMenuCategories = activeMenuCategories.map((menuCategory) => {
+    const newMenus = activeMenus.map((menu) => {
       if (
         (selectedActiveItemsCount > 0 &&
-          selectedActiveItemsCount < activeMenuCategories.length) ||
+          selectedActiveItemsCount < activeMenus.length) ||
         selectedActiveItemsCount === 0
       ) {
-        menuCategory.isSelected = true;
+        menu.isSelected = true;
       } else {
-        menuCategory.isSelected = false;
+        menu.isSelected = false;
       }
 
-      if (menuCategory.isSelected) {
+      if (menu.isSelected) {
         selectedItemsCount++;
       }
 
-      return menuCategory;
+      return menu;
     });
 
     setSelectedActiveItemsCount(selectedItemsCount);
 
     if (
-      activeMenuCategories.length > 0 &&
-      selectedActiveItemsCount === activeMenuCategories.length
+      activeMenus.length > 0 &&
+      selectedActiveItemsCount === activeMenus.length
     ) {
       setActiveIsSelectAllChecked(false);
     } else {
       setActiveIsSelectAllChecked(true);
     }
 
-    setActiveMenuCategories(newMenuCategories);
+    setActiveMenus(newMenus);
   };
 
   const handleInactiveSelectAllClick = () => {
     let selectedItemsCount = 0;
-    const newMenuCategories = inactiveMenuCategories.map((menuCategory) => {
+    const newMenus = inactiveMenus.map((menu) => {
       if (
         (selectedInactiveItemsCount > 0 &&
-          selectedInactiveItemsCount < inactiveMenuCategories.length) ||
+          selectedInactiveItemsCount < inactiveMenus.length) ||
         selectedInactiveItemsCount === 0
       ) {
-        menuCategory.isSelected = true;
+        menu.isSelected = true;
       } else {
-        menuCategory.isSelected = false;
+        menu.isSelected = false;
       }
 
-      if (menuCategory.isSelected) {
+      if (menu.isSelected) {
         selectedItemsCount++;
       }
 
-      return menuCategory;
+      return menu;
     });
 
     setSelectedInactiveItemsCount(selectedItemsCount);
 
     if (
-      inactiveMenuCategories.length > 0 &&
-      selectedInactiveItemsCount === inactiveMenuCategories.length
+      inactiveMenus.length > 0 &&
+      selectedInactiveItemsCount === inactiveMenus.length
     ) {
       setInactiveIsSelectAllChecked(false);
     } else {
       setInactiveIsSelectAllChecked(true);
     }
 
-    setInactiveMenuCategories(newMenuCategories);
+    setInactiveMenus(newMenus);
   };
 
   const handleEditModalButtonClicked = () => {
-    updateMenuCategory();
-    // setOpenEditModal(false);
-    // resetToDefault();
-  };
-
-  const handleActiveMenuCategoriesLoad = (contents) => {
-    setActiveMenuCategories(
-      contents.map((menuCategory) => {
-        return {
-          ...menuCategory,
-          isSelected: false,
-        };
-      })
-    );
+    updateMenu();
   };
 
   const handleActiveTotalPagesLoad = (data) => {
     setActiveTotalPages(data);
   };
 
+  const handleActiveMenuCategoriesLoad = (data) => {
+    setActiveMenuCategories(data);
+  };
+
   const getAllActiveMenuCategories = () => {
+    rest.get(`${INITIAL_URL}/menu-category`, handleActiveMenuCategoriesLoad);
+  };
+
+  const handleActiveIngredients = (data) => {
+    setActiveIngredients(data);
+  };
+
+  const getAllActiveIngredients = () => {
+    rest.get(`${INITIAL_URL}/supply`, handleActiveIngredients);
+  };
+
+  const handleActiveMenusLoad = (contents) => {
+    setActiveMenus(
+      contents.map((menu) => {
+        return {
+          ...menu,
+          isSelected: false,
+        };
+      })
+    );
+  };
+
+  const getAllActiveMenus = () => {
     rest.getWithPagination(
-      `${INITIAL_URL}/menu-category/active`,
+      `${INITIAL_URL}/menu/active`,
       activePagination.tojson(),
-      handleActiveMenuCategoriesLoad,
+      handleActiveMenusLoad,
       handleActiveTotalPagesLoad
     );
   };
 
-  const handleInactiveMenuCategoriesLoad = (contents) => {
-    setInactiveMenuCategories(
-      contents.map((menuCategory) => {
+  const handleInactiveMenusLoad = (contents) => {
+    setInactiveMenus(
+      contents.map((menu) => {
         return {
-          ...menuCategory,
+          ...menu,
           isSelected: false,
         };
       })
@@ -404,109 +555,116 @@ const MenuCategoryPage = () => {
     setInactiveTotalPages(data);
   };
 
-  const getAllInactiveMenuCategories = () => {
+  const getAllInactiveMenus = () => {
     rest.getWithPagination(
-      `${INITIAL_URL}/menu-category/inactive`,
+      `${INITIAL_URL}/menu/inactive`,
       inactivePagination.tojson(),
-      handleInactiveMenuCategoriesLoad,
+      handleInactiveMenusLoad,
       handleInactiveTotalPagesLoad
     );
   };
 
-  const loadAllMenuCategories = () => {
-    getAllActiveMenuCategories();
-    getAllInactiveMenuCategories();
+  const loadAllMenus = () => {
+    getAllActiveMenus();
+    getAllInactiveMenus();
   };
 
   const addSuccessAction = () => {
-    loadAllMenuCategories();
+    loadAllMenus();
     setOpenAddModal(false);
-    setAddedMenuCategory(new MenuCategory(1, "", true));
+    setAddedMenu(new Menu(1, "", 0, activeMenuCategories[0], [], 0, true));
     resetToDefault();
   };
 
-  const addMenuCategory = () => {
+  const addMenu = () => {
     rest.add(
-      `${INITIAL_URL}/menu-category/add`,
-      addedMenuCategory.toJson(),
+      `${INITIAL_URL}/menu/add`,
+      addedMenu.toJson(),
       addSuccessAction,
-      `Successully added ${addedMenuCategory.menuCategoryName}`
+      `Successully added ${addedMenu.menuName}`
     );
   };
 
   const updateSuccessAction = () => {
-    loadAllMenuCategories();
+    loadAllMenus();
     setOpenEditModal(false);
     resetToDefault();
   };
 
-  const updateMenuCategory = () => {
+  const updateMenu = () => {
     rest.update(
-      `${INITIAL_URL}/menu-category/update/${editedMenuCategory.menuCategoryId}`,
-      editedMenuCategory.toJson(),
+      `${INITIAL_URL}/menu/update/${editedMenu.menuId}`,
+      editedMenu.toJson(),
       updateSuccessAction,
-      `Successully updated Menu Category ${editedMenuCategory.menuCategoryId}`
+      `Successully updated Menu ${editedMenu.menuId}`
     );
   };
 
   const handleActivateClick = () => {
-    activateMenuCategory();
+    activateMenu();
     resetToDefault();
   };
 
   const handleInactivateClick = () => {
-    inactivateMenuCategory();
+    inactivateMenu();
     resetToDefault();
   };
 
-  const activateMenuCategory = () => {
+  const activateMenu = () => {
     const body = {
-      menuCategoryListDto: inactiveMenuCategories.filter(
-        (menuCategories) => menuCategories.isSelected
-      ),
+      menuListDto: inactiveMenus.filter((menu) => menu.isSelected),
     };
     rest.activate(
-      `${INITIAL_URL}/menu-category/activate`,
+      `${INITIAL_URL}/menu/activate`,
       body,
-      loadAllMenuCategories,
-      `Successully activated the selected Menu Categories`
+      loadAllMenus,
+      `Successully activated the selected Menu`
     );
   };
 
-  const inactivateMenuCategory = () => {
+  const inactivateMenu = () => {
     const body = {
-      menuCategoryListDto: activeMenuCategories.filter(
-        (menuCategories) => menuCategories.isSelected
-      ),
+      menuListDto: activeMenus.filter((menu) => menu.isSelected),
     };
-
-    rest.inactivate(
-      `${INITIAL_URL}/menu-category/inactivate`,
+    rest.activate(
+      `${INITIAL_URL}/menu/inactivate`,
       body,
-      loadAllMenuCategories,
-      `Successully inactivated the selected Menu Categories`
+      loadAllMenus,
+      `Successully inactivated the selected Menu`
     );
   };
 
   useEffect(() => {
-    loadAllMenuCategories();
+    loadAllMenus();
+    getAllActiveMenuCategories();
+    getAllActiveIngredients();
   }, [activePagination, inactivePagination]);
 
   return (
-    <div className={styles["menu-category-page"]}>
+    <div className={styles["menu-page"]}>
       <Toast />
-      <AddMenuCategoryModal
-        name={addedMenuCategory.menuCategoryName}
-        isActiveAdd={addedMenuCategory.isActive}
+      <AddMenuModal
+        activeMenus={activeMenus}
+        inactiveMenus={inactiveMenus}
+        allMenuCategories={activeMenuCategories}
+        allIngredients={activeIngredients}
+        name={addedMenu.menuName}
+        price={addedMenu.menuPrice}
+        menuCategory={addedMenu.menuCategoryName}
+        ingredients={addedMenu.ingredients}
+        isActive={addedMenu.isActive}
         nameOnChange={handleNameAddChange}
+        priceOnChange={handlePriceAddChange}
+        menuCategoryOnChange={handleMenuCategoryAddChange}
+        ingredientsOnChange={handleIngredientsAddChange}
+        isActiveOnChange={handleIsActiveAddChange}
         onClickAddButton={handleAddModalButtonClicked}
         openAddModal={openAddModal}
         handleCloseAddModal={handleCloseAddModal}
-        handleIsActiveAddChange={handleIsActiveAddChange}
       />
-      <InactiveMenuCategoryModal
+      <InactiveMenuModal
         headers={headers}
-        rows={inactiveMenuCategories}
+        rows={inactiveMenus}
         sortOrder={inactivePagination.isAscending ? "Ascending" : "Descending"}
         sortedBy={inactivePagination.sortedBy}
         pageNo={inactivePagination.pageNo}
@@ -527,41 +685,46 @@ const MenuCategoryPage = () => {
         handleCloseViewInactiveModal={handleCloseViewInactiveModal}
       />
 
-      <EditMenuCategoryModal
-        selectedEditItem={editedMenuCategory}
-        nameEdit={editedMenuCategory.menuCategoryName}
-        isActiveEdit={editedMenuCategory.isActive}
-        handleNameEditChange={handleNameEditChange}
-        handleIsActiveEditChange={handleIsActiveEditChange}
+      <EditMenuModal
+        activeMenus={activeMenus}
+        inactiveMenus={inactiveMenus}
+        allMenuCategories={activeMenuCategories}
+        allIngredients={activeIngredients}
+        id={editedMenu.menuId}
+        name={editedMenu.menuName}
+        price={editedMenu.menuPrice}
+        menuCategory={editedMenu.menuCategoryName}
+        ingredients={editedMenu.ingredients}
+        isActive={editedMenu.isActive}
+        nameOnChange={handleNameEditChange}
+        priceOnChange={handlePriceEditChange}
+        ingredientsOnChange={handleIngredientsEditChange}
+        menuCategoryOnChange={handleMenuCategoryEditChange}
+        isActiveOnChange={handleIsActiveEditChange}
         handleEditModalButtonClicked={handleEditModalButtonClicked}
         openEditModal={openEditModal}
         handleCloseEditModal={handleCloseEditModal}
       />
 
-      <section className={styles["menu-category-page__upper-section"]}>
+      <section className={styles["menu-page__upper-section"]}>
         <WindowControlBar />
       </section>
 
-      <section className={styles["menu-category-page__lower-section"]}>
-        <Navigation page="menu-category" />
-        <section className={styles["menu-category-page__main-section"]}>
-          <section className={styles["menu-category-page__main-top-section"]}>
+      <section className={styles["menu-page__lower-section"]}>
+        <Navigation page="menu" />
+        <section className={styles["menu-page__main-section"]}>
+          <section className={styles["menu-page__main-top-section"]}>
             <InactivateButton
               label="Inactivate"
               onClick={handleInactivateClick}
               disableCondition={selectedActiveItemsCount <= 0}
             />
-            <SaveButton
-              label="Add Menu Category"
-              onClick={handleOpenAddModal}
-            />
+            <SaveButton label="Add Menu" onClick={handleOpenAddModal} />
           </section>
-          <section
-            className={styles["menu-category-page__main-bottom-section"]}
-          >
+          <section className={styles["menu-page__main-bottom-section"]}>
             <DataTable
               headers={headers}
-              rows={activeMenuCategories}
+              rows={activeMenus}
               sortOrder={
                 activePagination.isAscending ? "Ascending" : "Descending"
               }
@@ -581,13 +744,9 @@ const MenuCategoryPage = () => {
               handleOpenEditModal={handleOpenEditModal}
               selectedItemsCount={selectedActiveItemsCount}
             />
-            <div
-              className={
-                styles["menu-category-page__view-inactive-items-buton"]
-              }
-            >
+            <div className={styles["menu-page__view-inactive-items-buton"]}>
               <InactiveItemsButton
-                label="View Inactive Menu Categories"
+                label="View Inactive Menu"
                 onClick={handleOpenViewInactiveModal}
               />
             </div>
@@ -598,4 +757,4 @@ const MenuCategoryPage = () => {
   );
 };
 
-export default MenuCategoryPage;
+export default MenuPage;

@@ -598,7 +598,7 @@ const UnitOfMeasurementPage = () => {
       </section>
 
       <section className={styles["unit-of-measurement-page__lower-section"]}>
-        <Navigation />
+        <Navigation page="unit-of-measurement" />
         <section className={styles["unit-of-measurement-page__main-section"]}>
           <section
             className={styles["unit-of-measurement-page__main-top-section"]}

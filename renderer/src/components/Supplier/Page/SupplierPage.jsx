@@ -673,7 +673,7 @@ const SupplierPage = () => {
       </section>
 
       <section className={styles["supplier-page__lower-section"]}>
-        <Navigation />
+        <Navigation page="supplier" />
         <section className={styles["supplier-page__main-section"]}>
           <section className={styles["supplier-page__main-top-section"]}>
             <InactivateButton
