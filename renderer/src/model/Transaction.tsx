@@ -6,7 +6,7 @@ class Transaction {
     transactByName: string;
     transactionDate: Date;
     supplierName: string;
-    supplyQuantity: string;
+    supplyQuantity: number;
     supplyName: string;
     unitOfMeasurementAbbreviation: string;
     pricePerUnit: number;
@@ -18,7 +18,7 @@ class Transaction {
         transactByName: string,
         transactionDate: Date,
         supplierName: string,
-        supplyQuantity: string,
+        supplyQuantity: number,
         supplyName: string,
         unitOfMeasurementAbbreviation: string,
         pricePerUnit: number,

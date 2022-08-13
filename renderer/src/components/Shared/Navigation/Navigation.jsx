@@ -60,12 +60,19 @@ const Navigation = ({ page }) => {
 
       <div className={styles["navigation__title"]}>TRANSACTIONS</div>
       <div className={styles["navigation__list"]}>
-        <div className={styles["navigation__item-container"]}>
+
+      <Link href="/stock-in">
+        <div className={[
+              styles["navigation__item-container"],
+              page === "stock-in" &&
+                styles["navigation__item-container--selected"],
+            ].join(" ")}>
           <div className={styles["navigation__item-icon"]}>
             <AddBoxIcon />
           </div>
           <div className={styles["navigation__item-text"]}>Stock-In</div>
         </div>
+      </Link>
 
         <div className={styles["navigation__item-container"]}>
           <div className={styles["navigation__item-icon"]}>

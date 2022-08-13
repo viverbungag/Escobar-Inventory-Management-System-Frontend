@@ -8,22 +8,25 @@ import { Modal, Slide, Backdrop } from "@mui/material";
 import ItemsSelect from "../../Shared/ItemsSelect/ItemsSelect";
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { TimePicker } from '@mui/x-date-pickers/TimePicker';
-import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
-import { MobileDatePicker } from '@mui/x-date-pickers/MobileDatePicker';
+import InputAdornment from '@mui/material/InputAdornment';
 
 const StockInTransactionModal = ({
   allSupplies,
   allSuppliers,
+  supply,
+  supplier,
   transactBy,
   transactionDate,
   quantity,
   unitOfMeasurement,
   pricePerUnit,
   expiryDate,
+  supplyOnChange,
+  supplierOnChange,
   transactionDateOnChange,
   quantityOnChange,
+  pricePerUnitOnChange,
   expiryDateOnChange,
   onClickAddButton,
 }) => {
@@ -42,15 +45,24 @@ const StockInTransactionModal = ({
           <div className={styles["add-supply-modal__content"]}>
             <div className={styles["add-supply-modal__title"]}>Stock-In</div>
             <div className={styles["add-supply-modal__text-field"]}>
-            <LocalizationProvider dateAdapter={AdapterDateFns}>
+              <LocalizationProvider dateAdapter={AdapterDateFns}>
                 <DesktopDatePicker
-                    label="Transaction Date"
-                    inputFormat="MM/dd/yyyy"
-                    value={transactionDate}
-                    onChange={transactionDateOnChange}
-                    renderInput={(params) => <TextField {...params} />}
+                  label="Transaction Date"
+                  inputFormat="MM/dd/yyyy"
+                  value={transactionDate}
+                  onChange={transactionDateOnChange}
+                  renderInput={(params) => <TextField {...params} />}
                 />
-            </LocalizationProvider>
+              </LocalizationProvider>
+              <LocalizationProvider dateAdapter={AdapterDateFns}>
+                <DesktopDatePicker
+                  label="Expiry Date"
+                  inputFormat="MM/dd/yyyy"
+                  value={expiryDate}
+                  onChange={expiryDateOnChange}
+                  renderInput={(params) => <TextField {...params} />}
+                />
+              </LocalizationProvider>
               <TextField
                 id="filled-basic"
                 type="number"
@@ -61,41 +73,39 @@ const StockInTransactionModal = ({
                 }
                 variant="standard"
                 fullWidth
-                value={minimumQuantity}
-                onChange={minimumQuantityOnChange}
+                value={quantity}
+                onChange={quantityOnChange}
+                InputProps={{
+                  startAdornment: <InputAdornment position="end">{unitOfMeasurement}</InputAdornment>,
+                }}
+              />
+              <TextField
+                id="filled-basic"
+                type="number"
+                label={
+                  <span className={styles["add-supply-modal__text"]}>
+                    Input Price per Unit
+                  </span>
+                }
+                variant="standard"
+                fullWidth
+                value={pricePerUnit}
+                onChange={pricePerUnitOnChange}
               />
               <ItemsSelect
-                label="Supply Category"
-                items={allSupplyCategories}
-                selectedItem={supplyCategory}
-                itemOnChange={supplyCategoryOnChange}
-              />
-
-              <ItemsSelect
-                label="Unit of Measurement"
-                items={allSuppliers}
-                selectedItem={unitOfMeasurement}
-                itemOnChange={unitOfMeasurementOnChange}
+                label="Supply"
+                items={allSupplies}
+                selectedItem={supply}
+                itemOnChange={supplyOnChange}
               />
               <ItemsSelect
                 label="Supplier"
-                items={allSupplies}
+                items={allSuppliers}
                 selectedItem={supplier}
                 itemOnChange={supplierOnChange}
               />
-              <FormControlLabel
-                checked={isActive}
-                onChange={isActiveOnChange}
-                control={<Switch color="primary" />}
-                label={
-                  <span className={styles["add-supply-modal__text"]}>
-                    Active State
-                  </span>
-                }
-                labelPlacement="top"
-              />
             </div>
-            <ModalSaveButton label="Add Supply" onClick={onClickAddButton} />
+            <ModalSaveButton label="Stock-in" onClick={onClickAddButton} />
           </div>
         </div>
       </Slide>
