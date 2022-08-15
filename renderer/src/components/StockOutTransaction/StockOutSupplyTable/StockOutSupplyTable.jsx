@@ -1,10 +1,7 @@
 import styles from "./StockOutSupplyTable.module.scss";
-import { Checkbox } from "@mui/material";
 import { TablePagination } from "@mui/material";
 import SortSelect from "../../Shared/SortSelect/SortSelect";
 import SortOrderRadioGroup from "../../Shared/SortOrderRadioGroup/SortOrderRadioGroup";
-import { Icon } from "@iconify/react";
-import editIcon from "@iconify/icons-akar-icons/edit";
 import StockOutButton from "../../Shared/Buttons/StockOutButton/StockOutButton";
 import shortid from 'shortid';
 
@@ -17,7 +14,6 @@ export default function StockOutSupplyTable({
   sortItems,
   pageSize,
   totalPages,
-  handleItemCheckboxChange,
   handlePageNoChange,
   handlePageSizeChange,
   handleSortedByChange,
@@ -25,9 +21,9 @@ export default function StockOutSupplyTable({
   handleOpenStockOutModal,
 }) {
   return (
-    <div className={styles["data-table"]}>
-      <div className={styles["data-table__controls"]}>
-        <div className={styles["data-table__sort"]}>
+    <div className={styles["stock-out-supply-table"]}>
+      <div className={styles["stock-out-supply-table__controls"]}>
+        <div className={styles["stock-out-supply-table__sort"]}>
           <SortSelect
             sortItems={sortItems}
             selectedSort={sortedBy}
