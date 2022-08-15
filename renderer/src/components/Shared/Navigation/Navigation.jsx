@@ -10,6 +10,7 @@ import GroupIcon from "@mui/icons-material/Group";
 import BrunchDiningIcon from "@mui/icons-material/BrunchDining";
 import ShoppingBagIcon from "@mui/icons-material/ShoppingBag";
 import StraightenIcon from "@mui/icons-material/Straighten";
+import LogoutIcon from '@mui/icons-material/Logout';
 import Link from "next/link";
 
 const Navigation = ({ page }) => {
@@ -17,19 +18,19 @@ const Navigation = ({ page }) => {
     <div className={styles["navigation"]}>
       <div className={styles["navigation__title"]}>NAVIGATION</div>
       <div className={styles["navigation__list"]}>
-      <Link href="/dashboard">
-        <div
-          className={[
-            styles["navigation__item-container"],
-            page === "dashboard" &&
-              styles["navigation__item-container--selected"],
-          ].join(" ")}
-        >
-          <div className={styles["navigation__item-icon"]}>
-            <DashboardIcon />
+        <Link href="/dashboard">
+          <div
+            className={[
+              styles["navigation__item-container"],
+              page === "dashboard" &&
+                styles["navigation__item-container--selected"],
+            ].join(" ")}
+          >
+            <div className={styles["navigation__item-icon"]}>
+              <DashboardIcon />
+            </div>
+            <div className={styles["navigation__item-text"]}>Dashboard</div>
           </div>
-          <div className={styles["navigation__item-text"]}>Dashboard</div>
-        </div>
         </Link>
 
         <Link href="/menu">
@@ -173,6 +174,21 @@ const Navigation = ({ page }) => {
             </div>
             <div className={styles["navigation__item-text"]}>
               Unit of Measurement
+            </div>
+          </div>
+        </Link>
+      </div>
+      <div className={styles["navigation__title"]}>OTHERS</div>
+      <div className={styles["navigation__list"]}>
+        <Link href="/login">
+          <div
+            className={styles["navigation__item-container"]}
+          >
+            <div className={styles["navigation__item-icon"]}>
+              <LogoutIcon />
+            </div>
+            <div className={styles["navigation__item-text"]}>
+              Logout
             </div>
           </div>
         </Link>

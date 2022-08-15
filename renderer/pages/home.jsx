@@ -1,9 +1,9 @@
 import React from "react";
 import MenuCategoryPage from "../src/components/MenuCategory/Page/MenuCategoryPage";
-import MenuPage from "../src/components/Menu/Page/MenuPage";
+import LoginPage from "../src/components/Login/Page/LoginPage";
 
 function Home() {
-  return <MenuPage />;
+  return <LoginPage />;
 }
 
 export default Home;

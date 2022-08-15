@@ -44,10 +44,10 @@ const StockInTransactionModal = ({
       }}
     >
       <Slide direction="down" in={true} mountOnEnter unmountOnExit>
-        <div className={styles["add-supply-modal"]}>
-          <div className={styles["add-supply-modal__content"]}>
-            <div className={styles["add-supply-modal__title"]}>Stock-In</div>
-            <div className={styles["add-supply-modal__text-field"]}>
+        <div className={styles["stock-in-transaction-modal"]}>
+          <div className={styles["stock-in-transaction-modal__content"]}>
+            <div className={styles["stock-in-transaction-modal__title"]}>Stock-In</div>
+            <div className={styles["stock-in-transaction-modal__text-field"]}>
               <LocalizationProvider dateAdapter={AdapterDateFns}>
                 <DesktopDatePicker
                   label="Transaction Date"
@@ -82,7 +82,7 @@ const StockInTransactionModal = ({
                 id="filled-basic"
                 type="number"
                 label={
-                  <span className={styles["add-supply-modal__text"]}>
+                  <span className={styles["stock-in-transaction-modal__text"]}>
                     Input Quantity here
                   </span>
                 }
@@ -98,7 +98,7 @@ const StockInTransactionModal = ({
                 id="filled-basic"
                 type="number"
                 label={
-                  <span className={styles["add-supply-modal__text"]}>
+                  <span className={styles["stock-in-transaction-modal__text"]}>
                     Input Price per Unit
                   </span>
                 }

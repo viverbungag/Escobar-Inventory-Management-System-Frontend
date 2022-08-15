@@ -109,6 +109,25 @@ class Rest {
         toast.error(error?.response?.data?.message);
       });
   }
+
+  login(
+    url: string,
+    body: Object,
+    handleSuccessAction: Function,
+    successMessage: string
+  ) {
+    axios
+    .post(url, body)
+    .then(function (response) {
+      if (response.status === 200) {
+        handleSuccessAction();
+        toast.success(successMessage);
+      }
+    })
+    .catch(function (error) {
+      toast.error(error?.response?.data?.message);
+    });
+  }
 }
 
 export default Rest;
