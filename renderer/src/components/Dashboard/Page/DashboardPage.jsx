@@ -7,7 +7,6 @@ import Toast from "../../Shared/Toast/Toast";
 const DashboardPage = () => {
   return (
     <div className={styles["dashboard-page"]}>
-      <Toast />
       <section className={styles["dashboard-page__upper-section"]}>
         <WindowControlBar />
       </section>
