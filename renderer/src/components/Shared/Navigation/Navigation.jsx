@@ -60,26 +60,35 @@ const Navigation = ({ page }) => {
 
       <div className={styles["navigation__title"]}>TRANSACTIONS</div>
       <div className={styles["navigation__list"]}>
-
-      <Link href="/stock-in">
-        <div className={[
+        <Link href="/stock-in">
+          <div
+            className={[
               styles["navigation__item-container"],
               page === "stock-in" &&
                 styles["navigation__item-container--selected"],
-            ].join(" ")}>
-          <div className={styles["navigation__item-icon"]}>
-            <AddBoxIcon />
+            ].join(" ")}
+          >
+            <div className={styles["navigation__item-icon"]}>
+              <AddBoxIcon />
+            </div>
+            <div className={styles["navigation__item-text"]}>Stock-In</div>
           </div>
-          <div className={styles["navigation__item-text"]}>Stock-In</div>
-        </div>
-      </Link>
+        </Link>
 
-        <div className={styles["navigation__item-container"]}>
-          <div className={styles["navigation__item-icon"]}>
-            <IndeterminateCheckBoxIcon />
+        <Link href="/stock-out">
+          <div
+            className={[
+              styles["navigation__item-container"],
+              page === "stock-out" &&
+                styles["navigation__item-container--selected"],
+            ].join(" ")}
+          >
+            <div className={styles["navigation__item-icon"]}>
+              <IndeterminateCheckBoxIcon />
+            </div>
+            <div className={styles["navigation__item-text"]}>Stock-Out</div>
           </div>
-          <div className={styles["navigation__item-text"]}>Stock-Out</div>
-        </div>
+        </Link>
 
         <div className={styles["navigation__item-container"]}>
           <div className={styles["navigation__item-icon"]}>

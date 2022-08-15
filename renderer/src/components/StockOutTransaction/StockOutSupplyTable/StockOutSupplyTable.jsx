@@ -1,31 +1,28 @@
-import styles from "./DataTable.module.scss";
+import styles from "./StockOutSupplyTable.module.scss";
 import { Checkbox } from "@mui/material";
 import { TablePagination } from "@mui/material";
-import SortSelect from "../SortSelect/SortSelect";
-import SortOrderRadioGroup from "../SortOrderRadioGroup/SortOrderRadioGroup";
+import SortSelect from "../../Shared/SortSelect/SortSelect";
+import SortOrderRadioGroup from "../../Shared/SortOrderRadioGroup/SortOrderRadioGroup";
 import { Icon } from "@iconify/react";
 import editIcon from "@iconify/icons-akar-icons/edit";
+import StockOutButton from "../../Shared/Buttons/StockOutButton/StockOutButton";
 import shortid from 'shortid';
 
-export default function EnhancedTable({
+export default function StockOutSupplyTable({
   headers,
   rows,
   sortOrder,
   sortedBy,
   pageNo,
   sortItems,
-  tableState,
   pageSize,
   totalPages,
   handleItemCheckboxChange,
-  isSelectAllChecked,
-  handleSelectAllClick,
   handlePageNoChange,
   handlePageSizeChange,
   handleSortedByChange,
   handleSortOrderChange,
-  handleOpenEditModal,
-  selectedItemsCount,
+  handleOpenStockOutModal,
 }) {
   return (
     <div className={styles["data-table"]}>
@@ -55,16 +52,6 @@ export default function EnhancedTable({
       <table>
         <thead>
           <tr>
-            <td className={styles["data-table__checkbox-column"]}>
-              <Checkbox
-                checked={isSelectAllChecked}
-                onClick={handleSelectAllClick}
-                indeterminate={
-                  selectedItemsCount > 0 && selectedItemsCount < rows.length
-                }
-                disabled={rows.length === 0}
-              />
-            </td>
             {headers.map((header, index) => (
               <td key={shortid.generate()}>{header.label}</td>
             ))}
@@ -74,31 +61,19 @@ export default function EnhancedTable({
         <tbody>
           {rows.map((row, index) => {
             return (
-              <tr
-                key={shortid.generate()}
-                onClick={() => {
-                  handleItemCheckboxChange(row);
-                }}
-                className={
-                  row.isSelected
-                    ? styles["data-table__row--selected"]
-                    : undefined
-                }
-              >
-                <td className={styles["data-table__checkbox-column"]}>
-                  <Checkbox checked={row.isSelected} />
-                </td>
+              <tr key={shortid.generate()}>
                 {headers.map((header, index) => {
                   return (
-                    <td key={shortid.generate()}>
+                    <td key={Object.values(row)[1] + index}>
                       {String(row[header.value])}
                     </td>
                   );
                 })}
-                <td className={styles["data-table__edit-icon"]}>
-                  <button onClick={() => handleOpenEditModal(row, tableState)}>
-                    <Icon icon={editIcon} width="20" height="20" />
-                  </button>
+                <td>
+                  <StockOutButton
+                    onClick={() => handleOpenStockOutModal(row)}
+                    label="Stock-Out"
+                  />
                 </td>
               </tr>
             );

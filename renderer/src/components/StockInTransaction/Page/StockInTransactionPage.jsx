@@ -20,11 +20,24 @@ const StockInTransactionPage = () => {
   const defaultExpirationDate = new Date(currentDate.getTime());
   defaultExpirationDate.setDate(defaultExpirationDate.getDate() + 7);
 
+  const currentUser = "Bungag, Viver";
+
   const [activeSuppliers, setActiveSuppliers] = useState([]);
   const [activeSupplies, setActiveSupplies] = useState([]);
 
   const [addTransaction, setAddTransaction] = useState(
-    new Transaction(1, "Bungag, Viver", currentDate, "", 1, "", "", 1, defaultExpirationDate, "STOCK_IN")
+    new Transaction(
+      1,
+      currentUser,
+      currentDate,
+      "",
+      1,
+      "",
+      "",
+      1,
+      defaultExpirationDate,
+      "STOCK_IN"
+    )
   );
 
   const rest = new Rest();
@@ -81,15 +94,17 @@ const StockInTransactionPage = () => {
   };
 
   const handleSupplyOnChange = (event) => {
-    const selectedSupplyName = event.target.value
-    const selectedSupply = activeSupplies.find((supply)=> supply.supplyName === selectedSupplyName);
+    const selectedSupplyName = event.target.value;
+    const selectedSupply = activeSupplies.find(
+      (supply) => supply.supplyName === selectedSupplyName
+    );
 
     setAddTransaction(
       new Transaction(
         addTransaction.transactionId,
         addTransaction.transactByName,
         addTransaction.transactionDate,
-        addTransaction.supplierName,
+        selectedSupply.supplierName,
         addTransaction.supplyQuantity,
         selectedSupplyName,
         selectedSupply.unitOfMeasurementAbbreviation,
@@ -137,13 +152,13 @@ const StockInTransactionPage = () => {
   const handleAddModalButtonClicked = () => {
     stockIn();
   };
-  
+
   const handleActiveSuppliesLoad = (data) => {
     setActiveSupplies(data);
   };
 
   const getAllActiveSupplies = () => {
-    rest.get(`${INITIAL_URL}/supply`, handleActiveSuppliesLoad);
+    rest.get(`${INITIAL_URL}/supply/with-suppliers`, handleActiveSuppliesLoad);
   };
 
   const handleActiveSuppliersLoad = (data) => {
@@ -158,9 +173,9 @@ const StockInTransactionPage = () => {
     setAddTransaction(
       new Transaction(
         1,
-        "Bungag, Viver",
+        currentUser,
         currentDate,
-        activeSuppliers[0],
+        activeSupplies[0]?.supplierName,
         1,
         activeSupplies[0]?.supplyName,
         activeSupplies[0]?.unitOfMeasurementAbbreviation,
@@ -185,38 +200,38 @@ const StockInTransactionPage = () => {
   useEffect(() => {
     getAllActiveSuppliers();
     getAllActiveSupplies();
-  },[]);
+  }, []);
 
   return (
     <>
-    <div className={styles["stock-in-transaction-page"]}>
-      <Toast />
-      <StockInTransactionModal
-        allSupplies={activeSupplies}
-        allSuppliers={activeSuppliers}
-        supply={addTransaction.supplyName}
-        supplier={addTransaction.supplierName}
-        transactBy={addTransaction.transactBy}
-        transactionDate={addTransaction.transactionDate}
-        quantity={addTransaction.supplyQuantity}
-        unitOfMeasurement={addTransaction.unitOfMeasurementAbbreviation}
-        pricePerUnit={addTransaction.pricePerUnit}
-        expiryDate={addTransaction.expiryDate}
-        supplyOnChange={handleSupplyOnChange}
-        supplierOnChange={handleSupplierOnChange}
-        transactionDateOnChange={handleTransactionDateOnChange}
-        quantityOnChange={handleQuantityOnChange}
-        pricePerUnitOnChange={handlePricePerUnitOnChange}
-        expiryDateOnChange={handleExpiryDateOnChange}
-        onClickAddButton={handleAddModalButtonClicked}
-      />
-      <section className={styles["stock-in-transaction-page__upper-section"]}>
-        <WindowControlBar />
-      </section>
-      <section className={styles["stock-in-transaction-page__lower-section"]}>
-        <Navigation page="stock-in" />
-      </section>
-    </div>
+      <div className={styles["stock-in-transaction-page"]}>
+        <Toast />
+        <StockInTransactionModal
+          allSupplies={activeSupplies}
+          allSuppliers={activeSuppliers}
+          supply={addTransaction.supplyName}
+          supplier={addTransaction.supplierName}
+          transactBy={addTransaction.transactBy}
+          transactionDate={addTransaction.transactionDate}
+          quantity={addTransaction.supplyQuantity}
+          unitOfMeasurement={addTransaction.unitOfMeasurementAbbreviation}
+          pricePerUnit={addTransaction.pricePerUnit}
+          expiryDate={addTransaction.expiryDate}
+          supplyOnChange={handleSupplyOnChange}
+          supplierOnChange={handleSupplierOnChange}
+          transactionDateOnChange={handleTransactionDateOnChange}
+          quantityOnChange={handleQuantityOnChange}
+          pricePerUnitOnChange={handlePricePerUnitOnChange}
+          expiryDateOnChange={handleExpiryDateOnChange}
+          onClickAddButton={handleAddModalButtonClicked}
+        />
+        <section className={styles["stock-in-transaction-page__upper-section"]}>
+          <WindowControlBar />
+        </section>
+        <section className={styles["stock-in-transaction-page__lower-section"]}>
+          <Navigation page="stock-in" />
+        </section>
+      </div>
     </>
   );
 };
