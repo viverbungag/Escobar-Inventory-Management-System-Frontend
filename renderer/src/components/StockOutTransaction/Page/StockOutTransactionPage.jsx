@@ -82,17 +82,9 @@ const StockOutTransactionPage = () => {
   const [activePagination, setActivePagination] = useState(
     new Pagination(0, 10, "None", true)
   );
-  const [inactivePagination, setInactivePagination] = useState(
-    new Pagination(0, 10, "None", true)
-  );
 
   const [activeTotalPages, setActiveTotalPages] = useState(0);
-  const [inactiveTotalPages, setInactiveTotalPages] = useState(0);
-
-  const [selectedActiveItemsCount, setSelectedActiveItemsCount] = useState(0);
-  const [selectedInactiveItemsCount, setSelectedInactiveItemsCount] =
-    useState(0);
-
+  
   const [addTransaction, setAddTransaction] = useState(
     new Transaction(
       1,
@@ -102,7 +94,7 @@ const StockOutTransactionPage = () => {
       1,
       "",
       "",
-      1,
+      0,
       defaultExpirationDate,
       "STOCK_OUT"
     )
@@ -122,7 +114,7 @@ const StockOutTransactionPage = () => {
         1,
         supply.supplyName,
         supply.unitOfMeasurementName,
-        1,
+        0,
         defaultExpirationDate,
         "STOCK_OUT"
       )
@@ -255,10 +247,10 @@ const StockOutTransactionPage = () => {
 
   useEffect(() => {
     loadAllSupplies();
-  }, [activePagination, inactivePagination]);
+  }, [activePagination]);
 
   return (
-    <div className={styles["supply-page"]}>
+    <div className={styles["stock-out-transaction-page"]}>
       <Toast />
       <AddStockOutTransactionModal 
         supplyName={addTransaction.supplyName}
@@ -270,14 +262,14 @@ const StockOutTransactionPage = () => {
         handleCloseAddModal={handleCloseAddModal}
       />
 
-      <section className={styles["supply-page__upper-section"]}>
+      <section className={styles["stock-out-transaction-page__upper-section"]}>
         <WindowControlBar />
       </section>
 
-      <section className={styles["supply-page__lower-section"]}>
+      <section className={styles["stock-out-transaction-page__lower-section"]}>
         <Navigation page="stock-out" />
-        <section className={styles["supply-page__main-section"]}>
-          <section className={styles["supply-page__main-bottom-section"]}>
+        <section className={styles["stock-out-transaction-page__main-section"]}>
+          <section className={styles["stock-out-transaction-page__main-bottom-section"]}>
             <StockOutSupplyTable
               headers={headers}
               rows={activeSupplies}
@@ -294,7 +286,6 @@ const StockOutTransactionPage = () => {
               handlePageSizeChange={handleActivePageSizeChange}
               handleSortedByChange={handleActiveSortedByChange}
               handleSortOrderChange={handleActiveSortOrderChange}
-              selectedItemsCount={selectedActiveItemsCount}
               handleOpenStockOutModal={handleOpenStockOutModal}
             />
           </section>

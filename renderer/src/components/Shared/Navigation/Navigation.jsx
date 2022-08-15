@@ -17,6 +17,7 @@ const Navigation = ({ page }) => {
     <div className={styles["navigation"]}>
       <div className={styles["navigation__title"]}>NAVIGATION</div>
       <div className={styles["navigation__list"]}>
+      <Link href="/dashboard">
         <div
           className={[
             styles["navigation__item-container"],
@@ -29,6 +30,8 @@ const Navigation = ({ page }) => {
           </div>
           <div className={styles["navigation__item-text"]}>Dashboard</div>
         </div>
+        </Link>
+
         <Link href="/menu">
           <div
             className={[
@@ -90,14 +93,22 @@ const Navigation = ({ page }) => {
           </div>
         </Link>
 
-        <div className={styles["navigation__item-container"]}>
-          <div className={styles["navigation__item-icon"]}>
-            <VisibilityIcon />
+        <Link href="/view-transactions">
+          <div
+            className={[
+              styles["navigation__item-container"],
+              page === "view-transactions" &&
+                styles["navigation__item-container--selected"],
+            ].join(" ")}
+          >
+            <div className={styles["navigation__item-icon"]}>
+              <VisibilityIcon />
+            </div>
+            <div className={styles["navigation__item-text"]}>
+              View Transactions
+            </div>
           </div>
-          <div className={styles["navigation__item-text"]}>
-            View Transactions
-          </div>
-        </div>
+        </Link>
       </div>
 
       <div className={styles["navigation__title"]}>OTHERS</div>
