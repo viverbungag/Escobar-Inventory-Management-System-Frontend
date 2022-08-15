@@ -30,6 +30,9 @@ const StockInTransactionModal = ({
   expiryDateOnChange,
   onClickAddButton,
 }) => {
+  // supply = supply ? supply : allSupplies[0];
+  // supplier = supplier ? supplier : allSuppliers[0];
+  // console.log(supply);
   return (
     <Modal
       open={true}
@@ -63,6 +66,18 @@ const StockInTransactionModal = ({
                   renderInput={(params) => <TextField {...params} />}
                 />
               </LocalizationProvider>
+              <ItemsSelect
+                label="Supply"
+                items={allSupplies.map((supply)=>supply.supplyName)}
+                selectedItem={supply}
+                itemOnChange={supplyOnChange}
+              />
+              <ItemsSelect
+                label="Supplier"
+                items={allSuppliers}
+                selectedItem={supplier}
+                itemOnChange={supplierOnChange}
+              />
               <TextField
                 id="filled-basic"
                 type="number"
@@ -76,7 +91,7 @@ const StockInTransactionModal = ({
                 value={quantity}
                 onChange={quantityOnChange}
                 InputProps={{
-                  startAdornment: <InputAdornment position="end">{unitOfMeasurement}</InputAdornment>,
+                  endAdornment: <InputAdornment position="end">{unitOfMeasurement}</InputAdornment>,
                 }}
               />
               <TextField
@@ -91,18 +106,9 @@ const StockInTransactionModal = ({
                 fullWidth
                 value={pricePerUnit}
                 onChange={pricePerUnitOnChange}
-              />
-              <ItemsSelect
-                label="Supply"
-                items={allSupplies}
-                selectedItem={supply}
-                itemOnChange={supplyOnChange}
-              />
-              <ItemsSelect
-                label="Supplier"
-                items={allSuppliers}
-                selectedItem={supplier}
-                itemOnChange={supplierOnChange}
+                InputProps={{
+                  endAdornment: <InputAdornment position="end">Php.</InputAdornment>,
+                }}
               />
             </div>
             <ModalSaveButton label="Stock-in" onClick={onClickAddButton} />

@@ -11,37 +11,23 @@ import Toast from "../../Shared/Toast/Toast";
 import Pagination from "src/model/Pagination";
 import Rest from "../../../rest/Rest";
 import Transaction from "../../../model/Transaction";
+import dateFormat from "dateformat";
 
 const INITIAL_URL = "http://localhost:8080/api/v1";
 
 const StockInTransactionPage = () => {
-
-  const [addTransaction, setAddTransaction] = useState(
-    new Transaction(1, "", new Date(), "", 0, "", "", 0, new Date(), "")
-  );
+  const currentDate = new Date();
+  const defaultExpirationDate = new Date(currentDate.getTime());
+  defaultExpirationDate.setDate(defaultExpirationDate.getDate() + 7);
 
   const [activeSuppliers, setActiveSuppliers] = useState([]);
   const [activeSupplies, setActiveSupplies] = useState([]);
 
+  const [addTransaction, setAddTransaction] = useState(
+    new Transaction(1, "Bungag, Viver", currentDate, "", 1, "", "", 1, defaultExpirationDate, "STOCK_IN")
+  );
+
   const rest = new Rest();
-
-  const resetTransaction = () => {
-    setAddTransaction(
-      new Transaction(
-        1,
-        "",
-        new Date(),
-        activeSuppliers[0],
-        1,
-        activeSupplies[0],
-        "",
-        1,
-        new Date(),
-        ""
-      )
-    );
-  };
-
 
   const handleTransactionDateOnChange = (newDate) => {
     setAddTransaction(
@@ -95,6 +81,9 @@ const StockInTransactionPage = () => {
   };
 
   const handleSupplyOnChange = (event) => {
+    const selectedSupplyName = event.target.value
+    const selectedSupply = activeSupplies.find((supply)=> supply.supplyName === selectedSupplyName);
+
     setAddTransaction(
       new Transaction(
         addTransaction.transactionId,
@@ -102,8 +91,8 @@ const StockInTransactionPage = () => {
         addTransaction.transactionDate,
         addTransaction.supplierName,
         addTransaction.supplyQuantity,
-        event.target.value,
-        addTransaction.unitOfMeasurementAbbreviation,
+        selectedSupplyName,
+        selectedSupply.unitOfMeasurementAbbreviation,
         addTransaction.pricePerUnit,
         addTransaction.expiryDate,
         addTransaction.transactionType
@@ -154,7 +143,7 @@ const StockInTransactionPage = () => {
   };
 
   const getAllActiveSupplies = () => {
-    rest.get(`${INITIAL_URL}/supplies`, handleActiveSuppliersLoad);
+    rest.get(`${INITIAL_URL}/supply`, handleActiveSuppliesLoad);
   };
 
   const handleActiveSuppliersLoad = (data) => {
@@ -169,20 +158,22 @@ const StockInTransactionPage = () => {
     setAddTransaction(
       new Transaction(
         1,
-        "",
-        new Date(),
+        "Bungag, Viver",
+        currentDate,
         activeSuppliers[0],
         1,
-        activeSupplies[0],
-        "",
+        activeSupplies[0]?.supplyName,
+        activeSupplies[0]?.unitOfMeasurementAbbreviation,
         1,
-        new Date(),
-        ""
+        defaultExpirationDate,
+        "STOCK_IN"
       )
     );
   };
 
   const stockIn = () => {
+    console.log(addTransaction.toJson());
+
     rest.add(
       `${INITIAL_URL}/transaction/stock-in`,
       addTransaction.toJson(),
@@ -194,20 +185,20 @@ const StockInTransactionPage = () => {
   useEffect(() => {
     getAllActiveSuppliers();
     getAllActiveSupplies();
-    resetTransaction();
   },[]);
 
   return (
+    <>
     <div className={styles["stock-in-transaction-page"]}>
       <Toast />
       <StockInTransactionModal
-        allSupplies= {activeSupplies}
+        allSupplies={activeSupplies}
         allSuppliers={activeSuppliers}
         supply={addTransaction.supplyName}
         supplier={addTransaction.supplierName}
         transactBy={addTransaction.transactBy}
         transactionDate={addTransaction.transactionDate}
-        quantity={addTransaction.quantity}
+        quantity={addTransaction.supplyQuantity}
         unitOfMeasurement={addTransaction.unitOfMeasurementAbbreviation}
         pricePerUnit={addTransaction.pricePerUnit}
         expiryDate={addTransaction.expiryDate}
@@ -219,8 +210,14 @@ const StockInTransactionPage = () => {
         expiryDateOnChange={handleExpiryDateOnChange}
         onClickAddButton={handleAddModalButtonClicked}
       />
-      <Navigation page="stock-in" />
+      <section className={styles["stock-in-transaction-page__upper-section"]}>
+        <WindowControlBar />
+      </section>
+      <section className={styles["stock-in-transaction-page__lower-section"]}>
+        <Navigation page="stock-in" />
+      </section>
     </div>
+    </>
   );
 };
 
