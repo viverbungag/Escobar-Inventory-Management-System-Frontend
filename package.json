@@ -48,6 +48,7 @@
     "@storybook/react": "^6.5.9",
     "@storybook/testing-library": "^0.0.13",
     "@types/dateformat": "^5.0.0",
+    "@types/shortid": "^0.0.29",
     "babel-loader": "^8.2.5",
     "electron": "^18.2.0",
     "electron-builder": "^23.0.3",

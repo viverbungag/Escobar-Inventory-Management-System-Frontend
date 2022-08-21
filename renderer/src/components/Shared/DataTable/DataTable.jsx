@@ -7,7 +7,7 @@ import { Icon } from "@iconify/react";
 import editIcon from "@iconify/icons-akar-icons/edit";
 import shortid from 'shortid';
 
-export default function EnhancedTable({
+export default function DataTable({
   headers,
   rows,
   sortOrder,

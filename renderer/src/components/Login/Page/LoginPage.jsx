@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, createContext } from "react";
 import AccountLogin from "../../../model/AccountLogin";
 import ModalSaveButton from "../../Shared/Buttons/ModalSaveButton/ModalSaveButton";
 import Toast from "../../Shared/Toast/Toast";
@@ -10,20 +10,21 @@ import { useRouter } from "next/router";
 const INITIAL_URL = "http://localhost:8080/api/v1";
 
 const LoginPage = () => {
-  const [account, setAccount] = useState(new AccountLogin("", ""));
+  const [account, setAccount] = useState(new AccountLogin("", "", ""));
 
   const router = useRouter();
   const rest = new Rest();
 
   const handleUsernameOnChange = (event) => {
-    setAccount(new AccountLogin(event.target.value, account.accountPassword));
+    setAccount(new AccountLogin(event.target.value, account.accountPassword, account.employeeName));
   };
 
   const handlePasswordOnChange = (event) => {
-    setAccount(new AccountLogin(account.accountUsername, event.target.value));
+    setAccount(new AccountLogin(account.accountUsername, event.target.value, account.employeeName));
   };
 
-  const successfullLoginActions = () => {
+  const successfullLoginActions = (employeeName) => {
+    localStorage.setItem("username", employeeName);
     router.replace("/dashboard");
   };
 

@@ -14,7 +14,7 @@ const MenuProps = {
   PaperProps: {
     style: {
       maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-      width: 250,
+      width: 550,
     },
   },
 };
@@ -28,33 +28,43 @@ function getStyles(name, personName, theme) {
   };
 }
 
-export default function MultipleSelectChip({
+export default function FilterSelect({
   items,
   selectedItems,
   handleChange,
+  defaultLabel,
 }) {
   const theme = useTheme();
 
   return (
     <div>
-      <FormControl sx={{ m: 1, width: 300 }}>
-        <InputLabel id="demo-multiple-chip-label">Chip</InputLabel>
+      <FormControl sx={{ s: 1, width: 500 }} size="small">
         <Select
           labelId="demo-multiple-chip-label"
           id="demo-multiple-chip"
           multiple
+          displayEmpty
           value={selectedItems}
           onChange={handleChange}
-          input={<OutlinedInput id="select-multiple-chip" label="Chip" />}
-          renderValue={(selected) => (
-            <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
-              {selected.map((value) => (
-                <Chip key={value} label={value} />
-              ))}
-            </Box>
-          )}
+          input={<OutlinedInput id="select-multiple-chip"/>}
+          renderValue={(selected) => {
+            if (selected.length === 0) {
+              return <em>{defaultLabel}</em>;
+            }
+            return (
+              <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
+                {selected.map((value) => (
+                  <Chip key={value} label={value} />
+                ))}
+              </Box>
+            );
+          }}
           MenuProps={MenuProps}
+          inputProps={{ 'aria-label': 'Without label' }}
         >
+          <MenuItem disabled value="">
+            <em>{defaultLabel}</em>
+          </MenuItem>
           {items.map((name, index) => (
             <MenuItem
               key={name + index}

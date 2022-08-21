@@ -117,16 +117,35 @@ class Rest {
     successMessage: string
   ) {
     axios
-    .post(url, body)
-    .then(function (response) {
-      if (response.status === 200) {
-        handleSuccessAction();
-        toast.success(successMessage);
-      }
-    })
-    .catch(function (error) {
-      toast.error(error?.response?.data?.message);
-    });
+      .post(url, body)
+      .then(function (response) {
+        if (response.status === 200) {
+          handleSuccessAction(response.data.employeeName);
+          toast.success(successMessage);
+        }
+      })
+      .catch(function (error) {
+        toast.error(error?.response?.data?.message);
+      });
+  }
+
+  print(
+    url: string,
+    body: Object,
+    handleSuccessAction: Function,
+    successMessage: string
+  ) {
+    axios
+      .post(url, body)
+      .then(function (response) {
+        if (response.status === 200) {
+          handleSuccessAction();
+          toast.success(successMessage);
+        }
+      })
+      .catch(function (error) {
+        toast.error(error?.response?.data?.message);
+      });
   }
 }
 

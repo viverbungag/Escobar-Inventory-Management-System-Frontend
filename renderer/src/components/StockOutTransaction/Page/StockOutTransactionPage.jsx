@@ -75,7 +75,7 @@ const StockOutTransactionPage = () => {
   const defaultExpirationDate = new Date(currentDate.getTime());
   defaultExpirationDate.setDate(defaultExpirationDate.getDate() + 7);
 
-  const currentUser = "Bungag, Viver";
+  const currentUser = typeof window !== 'undefined' ? localStorage.getItem('username') : "";
 
   const [activeSupplies, setActiveSupplies] = useState([]);
 
