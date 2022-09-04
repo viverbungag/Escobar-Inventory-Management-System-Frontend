@@ -1,8 +1,11 @@
 import {
   screen,
   BrowserWindow,
+  ipcMain
 } from 'electron';
 import Store from 'electron-store';
+
+const ipc = ipcMain;
 
 export default function createWindow(windowName, options) {
   const key = 'window-state';
@@ -77,6 +80,14 @@ export default function createWindow(windowName, options) {
     frame:false
   });
   win.maximize();
+
+  ipc.on('close', () => {
+    win.close();
+  });
+
+  ipc.on('minimize', () => {
+    win.minimize();
+  });
 
   win.on('close', saveState);
 

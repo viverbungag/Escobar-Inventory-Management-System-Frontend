@@ -144,10 +144,12 @@ const EditMenuModal = ({
                 </div>
               </div>
               <div className={styles["edit-menu-modal__right-section"]}>
-                <EditIngredientsButton
-                  label="Edit Ingredients"
-                  onClick={handleOpenIngredientModal}
-                />
+                <div className={styles["edit-menu-modal__right-upper-section"]}> 
+                  <EditIngredientsButton
+                    label="Edit Ingredients"
+                    onClick={handleOpenIngredientModal}
+                  />
+                </div>
 
                 <IngredientsTable ingredients={ingredients} />
               </div>

@@ -6,6 +6,7 @@ import TextField from "@mui/material/TextField";
 import Rest from "../../../rest/Rest";
 import styles from "./LoginPage.module.scss";
 import { useRouter } from "next/router";
+import WindowControlBar from "src/components/Shared/WindowControlBar/WindowControlBar";
 
 const INITIAL_URL = "http://localhost:8080/api/v1";
 
@@ -40,6 +41,7 @@ const LoginPage = () => {
   return (
     <div className={styles["login-page"]}>
       <Toast />
+      <WindowControlBar />
       <div className={styles["login-page__container"]}>
         <div className={styles["login-page__title"]}>LOGIN</div>
         <TextField

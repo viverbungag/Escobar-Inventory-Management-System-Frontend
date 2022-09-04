@@ -2,7 +2,6 @@ import React from "react";
 import styles from "./IngredientsTable.module.scss";
 
 const IngredientsTable = ({ ingredients }) => {
-  console.log(ingredients);
   return (
     <div className={styles["ingredients-table"]}>
       <table>

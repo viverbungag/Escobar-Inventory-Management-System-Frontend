@@ -8,11 +8,33 @@
     &__container{
         display: flex;
         justify-content: flex-end;
-        gap: 1.5rem;
-        padding: 0.6rem 1rem;
+        align-items: center;
+        // gap: 1.5rem;
+        min-height: 100%;
+        // padding: 0 0.5rem;
+    }
 
+    &__icon{
+        padding: 0.6rem 0.8rem;
         svg{
             font-size: 1rem;
+            // padding: 0.6rem 1rem;
+        }
+
+        &:hover{
+            cursor: pointer;
+        }
+    }
+
+    &__exit-icon{
+        &:hover{
+            background-color: #f22e52;
+        }
+    }
+
+    &__minimize-icon{
+        &:hover{
+            background-color: #e7e4e5;
         }
     }
 
