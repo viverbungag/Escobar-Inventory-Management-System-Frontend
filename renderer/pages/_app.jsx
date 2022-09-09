@@ -1,6 +1,7 @@
 import React from "react";
 import Head from "next/head";
 import "../src/styles/global.scss";
+import { UserProvider } from '../src/components/contexts/UserContext';
 
 export default function (props) {
   const { Component, pageProps } = props;
@@ -20,7 +21,9 @@ export default function (props) {
           content="minimum-scale=1, initial-scale=1, width=device-width"
         />
       </Head>
-      <Component {...pageProps} />
+      <UserProvider>
+        <Component {...pageProps} />
+      </UserProvider>
     </React.Fragment>
   );
 }

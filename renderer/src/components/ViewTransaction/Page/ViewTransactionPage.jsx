@@ -12,6 +12,7 @@ import FilterTransactionModal from "../FilterTransactionModal/FilterTransactionM
 import OpenFilterButton from "../../Shared/Buttons/OpenFilterButton/OpenFilterButton";
 import PrintButton from "../../Shared/Buttons/PrintButton/PrintButton";
 import { toast } from "react-toastify";
+import { useUser } from "../../contexts/UserContext";
 
 const INITIAL_URL = "http://localhost:8080/api/v1";
 
@@ -299,11 +300,10 @@ const ViewTransactionPage = () => {
   };
 
   const handlePrintButtonOnClick = () => {
-    const username =
-      typeof window !== "undefined" ? localStorage.getItem("username") : "";
+    const { employeeName } = useUser();
     const transactionPrintDetails = new TransactionPrintDetails(
       transactions,
-      username
+      employeeName
     );
 
     rest.print(

@@ -13,15 +13,16 @@ import StraightenIcon from "@mui/icons-material/Straighten";
 import LogoutIcon from "@mui/icons-material/Logout";
 import PersonIcon from "@mui/icons-material/Person";
 import Link from "next/link";
+import { useUser } from '../../contexts/UserContext';
 
 const Navigation = ({ page }) => {
-  const username = typeof window !== 'undefined' ? localStorage.getItem('username') : "";
+  const { employeeName } = useUser();
 
   return (
     <div className={styles["navigation"]}>
       <div className={styles["navigation__profile"]}>
         <PersonIcon />
-        <h2>{username}</h2>
+        <h2>{employeeName}</h2>
       </div>
       <div className={styles["navigation__categories"]}>
         <div className={styles["navigation__category"]}>

@@ -7,25 +7,28 @@ import Rest from "../../../rest/Rest";
 import styles from "./LoginPage.module.scss";
 import { useRouter } from "next/router";
 import WindowControlBar from "src/components/Shared/WindowControlBar/WindowControlBar";
+import { useUser, useUserUpdate } from "../../contexts/UserContext";
 
 const INITIAL_URL = "http://localhost:8080/api/v1";
 
 const LoginPage = () => {
-  const [account, setAccount] = useState(new AccountLogin("", "", ""));
+  
+  const account = useUser();
+  const accountOnChange = useUserUpdate();
 
   const router = useRouter();
   const rest = new Rest();
 
   const handleUsernameOnChange = (event) => {
-    setAccount(new AccountLogin(event.target.value, account.accountPassword, account.employeeName));
+    accountOnChange(event.target.value, account.accountPassword, account.employeeName);
   };
 
   const handlePasswordOnChange = (event) => {
-    setAccount(new AccountLogin(account.accountUsername, event.target.value, account.employeeName));
+    accountOnChange(account.accountUsername, event.target.value, account.employeeName )
   };
 
   const successfullLoginActions = (employeeName) => {
-    localStorage.setItem("username", employeeName);
+    accountOnChange(account.accountUsername, account.accountPassword, employeeName);
     router.replace("/dashboard");
   };
 

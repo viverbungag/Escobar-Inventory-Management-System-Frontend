@@ -8,6 +8,7 @@ import Pagination from "src/model/Pagination";
 import Rest from "../../../rest/Rest";
 import Transaction from "../../../model/Transaction";
 import StockOutSupplyTable from "../StockOutSupplyTable/StockOutSupplyTable";
+import { useUser } from "../../contexts/UserContext";
 
 const INITIAL_URL = "http://localhost:8080/api/v1";
 
@@ -75,7 +76,7 @@ const StockOutTransactionPage = () => {
   const defaultExpirationDate = new Date(currentDate.getTime());
   defaultExpirationDate.setDate(defaultExpirationDate.getDate() + 7);
 
-  const currentUser = typeof window !== 'undefined' ? localStorage.getItem('username') : "";
+  const { employeeName } = useUser();
 
   const [activeSupplies, setActiveSupplies] = useState([]);
 
@@ -88,7 +89,7 @@ const StockOutTransactionPage = () => {
   const [addTransaction, setAddTransaction] = useState(
     new Transaction(
       1,
-      currentUser,
+      employeeName,
       currentDate,
       "",
       1,
@@ -108,7 +109,7 @@ const StockOutTransactionPage = () => {
     setAddTransaction(
       new Transaction(
         1,
-        currentUser,
+        employeeName,
         currentDate,
         supply.supplierName,
         1,
@@ -130,7 +131,7 @@ const StockOutTransactionPage = () => {
     setAddTransaction(
       new Transaction(
         1,
-        currentUser,
+        employeeName,
         currentDate,
         addTransaction.supplierName,
         event.target.value,
@@ -222,7 +223,7 @@ const StockOutTransactionPage = () => {
     setAddTransaction(
       new Transaction(
         1,
-        currentUser,
+        employeeName,
         currentDate,
         activeSupplies[0]?.supplierName,
         1,
