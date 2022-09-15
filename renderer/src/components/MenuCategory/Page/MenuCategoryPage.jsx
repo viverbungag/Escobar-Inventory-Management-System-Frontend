@@ -14,7 +14,7 @@ import Pagination from "../../../model/Pagination";
 import Rest from "../../../rest/Rest";
 import MenuCategory from "src/model/MenuCategory";
 
-const INITIAL_URL = "http://localhost:8080/api/v1";
+const INITIAL_URL = process.env.NEXT_PUBLIC_INITIAL_URL;
 
 const headers = [
   {

@@ -6,7 +6,7 @@ import Rest from "../../../rest/Rest";
 import Pagination from "src/model/Pagination";
 import DashboardTable from "../DashboardTable/DashboardTable";
 
-const INITIAL_URL = "http://localhost:8080/api/v1";
+const INITIAL_URL = process.env.NEXT_PUBLIC_INITIAL_URL;
 
 const headers = [
   {

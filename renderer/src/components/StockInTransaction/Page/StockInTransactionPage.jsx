@@ -14,7 +14,7 @@ import Transaction from "../../../model/Transaction";
 import dateFormat from "dateformat";
 import { useUser } from "../../contexts/UserContext";
 
-const INITIAL_URL = "http://localhost:8080/api/v1";
+const INITIAL_URL = process.env.NEXT_PUBLIC_INITIAL_URL;
 
 const StockInTransactionPage = () => {
   const currentDate = new Date();

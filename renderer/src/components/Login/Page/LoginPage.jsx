@@ -9,7 +9,7 @@ import { useRouter } from "next/router";
 import WindowControlBar from "src/components/Shared/WindowControlBar/WindowControlBar";
 import { useUser, useUserUpdate } from "../../contexts/UserContext";
 
-const INITIAL_URL = "http://localhost:8080/api/v1";
+const INITIAL_URL = process.env.NEXT_PUBLIC_INITIAL_URL;
 
 const LoginPage = () => {
   
