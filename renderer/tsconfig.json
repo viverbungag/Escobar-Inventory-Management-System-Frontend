@@ -16,6 +16,6 @@
     "isolatedModules": true,
     "jsx": "preserve"
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "src/components/Shared/DataTable/DataTable.jsx", "src/components/Shared/DataTable/DataTable.stories.jsx", "pages/home.jsx", "src/components/Shared/WindowControlBar/WindowControlBar.stories.jsx", "src/components/Shared/WindowControlBar/WindowControlBar.jsx"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "src/components/Shared/DataTable/DataTable.jsx", "src/components/Shared/DataTable/DataTable.stories.jsx", "pages/home.jsx", "src/components/Shared/WindowControlBar/WindowControlBar.stories.jsx", "src/components/Shared/WindowControlBar/WindowControlBar.jsx", "find-pid-from-port"],
   "exclude": ["node_modules"]
 }
