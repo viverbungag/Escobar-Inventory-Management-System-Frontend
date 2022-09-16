@@ -1,6 +1,6 @@
-appId: com.example.nextron
-productName: My Nextron App
-copyright: Copyright © 2018 Yoshihide Shiono
+appId: com.exe.IMS
+productName: Inventory Management System
+copyright: Copyright © 2022 Viver Val Bungag
 directories:
   output: dist
   buildResources: resources

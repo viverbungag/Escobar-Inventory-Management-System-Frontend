@@ -83,6 +83,7 @@ const sortItems = [
 ];
 
 const ViewTransactionPage = () => {
+  const { employeeName } = useUser();
   const currentDate = new Date();
   const yesterdayDate = new Date(currentDate.getTime());
   yesterdayDate.setDate(yesterdayDate.getDate() - 1);
@@ -300,7 +301,6 @@ const ViewTransactionPage = () => {
   };
 
   const handlePrintButtonOnClick = () => {
-    const { employeeName } = useUser();
     const transactionPrintDetails = new TransactionPrintDetails(
       transactions,
       employeeName
